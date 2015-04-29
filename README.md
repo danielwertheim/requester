@@ -4,6 +4,18 @@ Requester is a Http-request fiddling magical something that is designed to help 
 ## Disclaimer, Remarks...
 This is still an early release and the API and license might change. And even do you could use `Requester` to interact with APIs without the intentions of validating it, that's not really the purpose. The purpose is the validate responses from APIs.
 
+## NuGet
+[Of course](https://www.nuget.org/packages/requester). Just do:
+
+	install-package requester
+
+Then import the namespaces:
+
+```csharp
+using Requester;
+using Requester.Validation;
+```
+
 ## Samples
 The samples below are written to work against a local CouchDB installation. By default, it's initialized to `Accept: application/json` hence:
 
