@@ -24,8 +24,8 @@ namespace Requester.Validation
             var o = JsonConvert.DeserializeObject<T>(Response.Content);
             if (o == null)
                 throw AssertionExceptionFactory.Create(Response, "Expected response content to match sent entity, but it deserialized to '{0}'", NullString.Value);
-            
-            //o.ShouldBeEquivalentTo(entity);
+
+            o.ShouldBeValueEqualTo(entity);
 
             return this;
         }

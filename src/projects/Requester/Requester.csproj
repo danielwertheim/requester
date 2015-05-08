@@ -62,6 +62,8 @@
     <Compile Include="Validation\HttpResponseValidation.cs" />
     <Compile Include="Validation\JsonHttpResponseValidation.cs" />
     <Compile Include="Validation\RequesterAssertionException.cs" />
+    <Compile Include="Validation\Should.cs" />
+    <Compile Include="Validation\TypeExtensions.cs" />
     <Compile Include="Validation\ValidationExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
