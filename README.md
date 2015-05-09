@@ -16,7 +16,7 @@ using Requester;
 using Requester.Validation;
 ```
 
-## Samples - Validation
+## Samples
 The samples below are written to work against a local CouchDB installation.
 
 ```csharp
@@ -28,7 +28,7 @@ When.Head("http://localhost:5984/mydb")
 ```
 
 ### Authentication
-For now only basic authentication is supported and it can be defined in two ways: via URL or using `WithAuthentication`.
+For now, only basic authentication is supported and it can be defined in two ways: via URL or using `WithAuthentication`.
 
 ```csharp
 When.Put("http://foo:bar@localhost:5984/mydb")
@@ -36,7 +36,7 @@ When.Put("http://foo:bar@localhost:5984/mydb")
 
 //vs
 
-When.Put(DbUrl, cfg => cfg
+When.Put("http://localhost:5984/mydb", cfg => cfg
     .WithBasicAuthorization("foo", "bar"))
     .TheResponse(should => should.BeSuccessful());
 ```
@@ -51,28 +51,14 @@ When.Put(DbUrl, cfg => cfg
     .TheResponse(should => should.BeSuccessful());
 ```
 
-### More validation expectations()
+### Expectations
+The idea is that you can use whatever testing framework you want. Below, I'm using NUnit. But it could just as well be xUnit.
 
 ```csharp
 [TestFixture(Description = "Little piece of candy shown, running against a CouchDB node")]
 public class Candy
 {
-    private const string DbUrl = "http://sa:test@ci01:5984/mydb/";
-    private HttpRequester _requester;
-
-    [TestFixtureSetUp]
-    public void Setup()
-    {
-        _requester = new HttpRequester(DbUrl);
-        _requester.SendAsync(new HttpRequest(HttpMethod.Delete)).Wait();
-    }
-
-    [TestFixtureTearDown]
-    public void Clean()
-    {
-        _requester.SendAsync(new HttpRequest(HttpMethod.Delete)).Wait();
-        _requester.Dispose();
-    }
+    private const string DbUrl = "http://sa:test@localhost:5984/mydb/";
 
     [Test]
     public void Can_eat_candy_like_a_monster()
@@ -125,6 +111,62 @@ public class Candy
 }
 ```
 
+Violations will show in your test runner. The sample below violates `HaveJsonConformingToSchema`.
+
+```
+My_test_one failed
+
+Requester.Validation.RequesterAssertionException : Expected object to be conforming to specified JSON schema.
+Failed when inspecting 'address.street' due to 'Invalid type. Expected Integer but got String. Line 1, position 112.'
+
+RequestUri: http://localhost:5984/mydb/doc1
+RequestMethod: GET
+Status: OK(200)
+Reason: OK
+ETag: 1-23c4402e369a7a56059d912e53d320ee
+ContentType:application/json
+HasContent:True
+Content:<NOT BEING SHOWED>
+```
+
+### HttpRequester
+The `HttpRequester` is what is used but the `When` constructs, and can of course be used to perform Http-requests.
+
+```csharp
+using(var requester = new HttpRequester("http://localhost:5984/mydb"))
+{
+  //Ensure db is created
+  await requester.SendAsync(new HttpRequest(HttpMethod.Put));
+
+  //Create a document
+  await requester.SendAsync(
+    new HttpRequest(HttpMethod.Put, "/mydocid").WithJsonContent(someJson));
+}
+```
+
+### HttpResponse
+The response of the `HttpRequester` is a `HttpResponse`.
+
+```csharp
+//Everything is a response (HEAD, GET, POST, PUT, DELETE)
+var get = await requester.SendAsync(new HttpRequest(HttpMethod.Get, "/mydocid"));
+
+//The resonse has like: StatusCode, Reason, Content, ETag, ContentType etc.
+Debug.WriteLine(get.ToStringDebugVersion(includeContent: true));
+```
+The out put would be:
+
+```
+RequestUri: http://localhost:5984/mydb/doc1
+RequestMethod: GET
+Status: OK(200)
+Reason: OK
+ETag: 1-23c4402e369a7a56059d912e53d320ee
+ContentType:application/json
+HasContent:True
+Content:{"_id":"doc1","_rev":"1-23c4402e369a7a56059d912e53d320ee","name":"Daniel Wertheim","address":{"street":"One way","zip":12345},"hobbies":["programming","running"]}
+```
+ 
 ### Custom testing framework assertion exceptions
 To keep down some dependencies, Requester throws a custom `RequesterAssertionException` but if you want your specific testing framework exceptions, just hook them in:
 
