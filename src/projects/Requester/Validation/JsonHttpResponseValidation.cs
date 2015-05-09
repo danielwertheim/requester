@@ -61,7 +61,10 @@ namespace Requester.Validation
 
             var schema = JsonSchema.Parse("{type: 'object', properties:" + properties + "}");
             JToken.Parse(Response.Content).Validate(schema, (sender, args) =>
-                AssertionExceptionFactory.Create(Response, "Expected object to be conforming to specified JSON schema, but... {0}", args.Message));
+            {
+                throw AssertionExceptionFactory.Create(Response,
+                    "Expected object to be conforming to specified JSON schema. Failed when inspecting '{0}' due to '{1}'", args.Path, args.Message);
+            });
 
             return this;
         }
