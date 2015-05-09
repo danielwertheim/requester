@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+    <metadata>
+        <id>Requester</id>
+        <title>Requester - Web API response validation</title>
+        <version>$version$</version>
+        <authors>danielwertheim</authors>
+        <copyright>©Daniel Wertheim</copyright>
+        <summary>For validation of HTTP web API JSON responses.</summary>
+        <description>Assists with making HTTP-requests against web APIs and to validates the response. E.g. validation JSON-schema etc.</description>
+        <projectUrl>https://github.com/danielwertheim/requester</projectUrl>
+        <licenseUrl>https://raw.githubusercontent.com/danielwertheim/requester/LICENSE.txt</licenseUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <tags>http web api json response validation</tags>
+        <frameworkAssemblies>
+          <frameworkAssembly assemblyName="System.Net.Http" targetFramework="net45" />
+        </frameworkAssemblies>
+        <dependencies>
+           <group targetFramework="net452">
+             <dependency id="Ensure.That" version="2.0.0" />
+             <dependency id="Newtonsoft.Json" version="6.0.8" />
+           </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="Requester.dll" target="lib\net452\Requester.dll"/>
+    </files>
+</package>

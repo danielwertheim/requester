@@ -10,6 +10,12 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+# deploy
+deploy/build
+deploy/builds
+deploy/tools/
+!deploy/tools/packages.config
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
