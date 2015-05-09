@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using EnsureThat;
 
-namespace Requester
+namespace Requester.Http
 {
     public class BasicAuthorizationString
     {
@@ -20,7 +20,7 @@ namespace Requester
         {
             var credentialsBytes = Encoding.UTF8.GetBytes(string.Format("{0}:{1}", username, password));
 
-            return "Basic " + Convert.ToBase64String(credentialsBytes);
+            return Convert.ToBase64String(credentialsBytes);
         }
 
         public static implicit operator string(BasicAuthorizationString item)

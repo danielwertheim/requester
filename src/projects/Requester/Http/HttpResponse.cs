@@ -2,7 +2,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 
-namespace Requester
+namespace Requester.Http
 {
     public class HttpResponse
     {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Requester.Http;
 
 namespace Requester.Extensions
 {

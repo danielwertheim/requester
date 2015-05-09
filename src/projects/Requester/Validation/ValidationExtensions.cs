@@ -1,10 +1,15 @@
+using System;
+using Requester.Http;
+
 namespace Requester.Validation
 {
     public static class ValidationExtensions
     {
-        public static HttpResponseValidation IsExpectedTo(this HttpResponse response)
+        public static HttpResponse TheResponse(this HttpResponse response, Action<HttpResponseValidation> should)
         {
-            return new HttpResponseValidation(response);
+            should(new HttpResponseValidation(response));
+
+            return response;
         }
     }
 }

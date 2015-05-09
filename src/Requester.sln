@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Requester.IntegrationTests", "tests\Requester.IntegrationTests\Requester.IntegrationTests.csproj", "{A8B59980-68BC-4C88-803B-9A913B0C6626}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{2C5A9BD7-7698-440A-8001-9463D3AED95A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C5A9BD7-7698-440A-8001-9463D3AED95A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C5A9BD7-7698-440A-8001-9463D3AED95A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8B59980-68BC-4C88-803B-9A913B0C6626}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8B59980-68BC-4C88-803B-9A913B0C6626}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8B59980-68BC-4C88-803B-9A913B0C6626}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8B59980-68BC-4C88-803B-9A913B0C6626}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,8 +1,8 @@
-namespace Requester
+namespace Requester.Http
 {
-    public class ContentTypes
+    public class HttpContentTypes
     {
-        public static ContentTypes Instance { get; private set; }
+        public static HttpContentTypes Instance { get; private set; }
 
         public string ApplicationJavaScript { get { return "application/javascript"; } }
         public string ApplicationJson { get { return "application/json"; } }
@@ -10,11 +10,11 @@ namespace Requester
         public string ApplicationGeoJson { get { return "application/vnd.geo+json"; } }
         public string TextJson { get { return "text/json"; } }
 
-        static ContentTypes()
+        static HttpContentTypes()
         {
-            Instance = new ContentTypes();
+            Instance = new HttpContentTypes();
         }
 
-        private ContentTypes() { }
+        private HttpContentTypes() { }
     }
 }

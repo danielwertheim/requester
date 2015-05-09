@@ -1,4 +1,5 @@
 using System.Net;
+using Requester.Http;
 
 namespace Requester.Validation
 {
