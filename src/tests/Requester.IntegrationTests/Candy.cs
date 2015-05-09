@@ -1,32 +1,30 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
-using NUnit.Framework;
 using Requester.Http;
 using Requester.Validation;
+using Xunit;
 
 namespace Requester.IntegrationTests
 {
-    [TestFixture(Description = "Little piece of candy shown, running against a CouchDB node")]
-    public class Candy
+    public class Candy : IDisposable
     {
         private const string DbUrl = "http://sa:test@ci01:5984/mydb/";
-        private HttpRequester _requester;
+        private readonly HttpRequester _requester;
 
-        [TestFixtureSetUp]
-        public void Setup()
+        public Candy()
         {
             _requester = new HttpRequester(DbUrl);
             _requester.SendAsync(new HttpRequest(HttpMethod.Delete)).Wait();
         }
 
-        [TestFixtureTearDown]
-        public void Clean()
+        public void Dispose()
         {
             _requester.SendAsync(new HttpRequest(HttpMethod.Delete)).Wait();
             _requester.Dispose();
         }
 
-        [Test]
+        [Fact]
         public void Can_eat_candy_like_a_monster()
         {
             When.Put(DbUrl)
