@@ -46,7 +46,7 @@ namespace Requester.Validation
                 throw AssertionExceptionFactory.Create(Response, "Expected sent path '{0}' to map to a node in the JSON document, but it did not.", path);
 
             if(!Equals(node.Value<T>(), expectedValue))
-                throw AssertionExceptionFactory.Create(Response, "Expected sent path '{0}' returned '{1}', but expected '{2}'.", path, node.Value<T>(), expectedValue);
+                throw AssertionExceptionFactory.Create(Response, "Expected sent path '{0}' to return '{1}', but got '{2}'.", path, expectedValue, node.Value<T>());
 
             return this;
         }
