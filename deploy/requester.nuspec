@@ -9,7 +9,7 @@
         <summary>For validation of HTTP web API JSON responses.</summary>
         <description>Assists with making HTTP-requests against web APIs and to validates the response. E.g. validation JSON-schema etc.</description>
         <projectUrl>https://github.com/danielwertheim/requester</projectUrl>
-        <licenseUrl>https://raw.githubusercontent.com/danielwertheim/requester/LICENSE.txt</licenseUrl>
+        <licenseUrl>https://raw.githubusercontent.com/danielwertheim/requester/master/LICENSE.txt</licenseUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <tags>http web api json response validation</tags>
         <frameworkAssemblies>
