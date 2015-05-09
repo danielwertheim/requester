@@ -125,15 +125,6 @@ public class Candy
 }
 ```
 
-You can of course use `ContinueWith`:
-
-```csharp
-await DoRequest
-	.Against("http://localhost:5984/mydb")
-	.UsingGetAsync()
-	.ContinueWith(t => t.Result.IsExpectedTo().BeSuccessful());
-```
-
 ### Custom testing framework assertion exceptions
 To keep down some dependencies, Requester throws a custom `RequesterAssertionException` but if you want your specific testing framework exceptions, just hook them in:
 
