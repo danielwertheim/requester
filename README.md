@@ -2,105 +2,171 @@
 Requester is a Http-request fiddling magical something that is designed to help me, and maybe you as well, to validate APIs. It's mainly focused on APIs that work with JSON. It was put together after some fiddling with an awesome NodeJS peer: [FrisbyJS](http://frisbyjs.com/ "FrisbyJS").
 
 ## Disclaimer, Remarks...
-This is still an early release and the API and license might change. And even do you could use `Requester` to interact with APIs without the intentions of validating it, that's not really the purpose. The purpose is the validate responses from APIs.
+This is still an early release hence stuff WILL change. Especially additions for URL-building and helpers for doing requests that should not be validated.
+
+## NuGet
+[Of course](https://www.nuget.org/packages/requester). Just do:
+
+	install-package requester
+
+Then import the namespaces:
+
+```csharp
+using Requester;
+using Requester.Validation;
+```
 
 ## Samples
-The samples below are written to work against a local CouchDB installation. By default, it's initialized to `Accept: application/json` hence:
+The samples below are written to work against a local CouchDB installation.
 
 ```csharp
-DoRequest
-	.Against("http://localhost:5984/mydb")
-	.UsingPostAsync(@"{""name"":""Daniel Wertheim""}")
-```
+When.Put("http://localhost:5984/mydb")
+    .TheResponse(should => should.BeSuccessful());
 
-is the same as:
-
-```csharp
-DoRequest
-	.Against("http://localhost:5984/mydb")
-	.WithAccept(i => i.ApplicationJson)
-	.UsingPostAsync(@"{""name"":""Daniel Wertheim""}")
-```
-
-### Base URL vs Relative URL
-The URL you specify to: `DoRequest.Against("...")` is the base URL. You can also provide an optional, relative URL, for each operation: `HEAD, GET, POST, PUT, DELETE`, using the overloads that accept it:
-
-```csharp
-DoRequest
-	.Against("http://localhost:5984/mydb/danielwertheim")
-	.UsingPutAsync(@"{""name"":""Daniel Wertheim""}");
-
-//vs
-
-DoRequest
-	.Against("http://localhost:5984/mydb")
-	.UsingPutAsync(@"{""name"":""Daniel Wertheim""}", "danielwertheim");
+When.Head("http://localhost:5984/mydb")
+    .TheResponse(should => should.BeSuccessful());
 ```
 
 ### Authentication
-For now only basic authentication is supported and it can be defined in two ways: via URL or using `WithAuthentication`.
+For now, only basic authentication is supported and it can be defined in two ways: via URL or using `WithAuthentication`.
 
 ```csharp
-DoRequest
-	.Against("http://myuser:mypwd@localhost:5984/mydb")
+When.Put("http://foo:bar@localhost:5984/mydb")
+	.TheResponse(should => should.BeSuccessful());
 
 //vs
 
-DoRequest
-	.Against("http://localhost:5984/mydb")
-	.WithBasicAuthorization("myuser", "mypwd")
+When.Put("http://localhost:5984/mydb", cfg => cfg
+    .WithBasicAuthorization("foo", "bar"))
+    .TheResponse(should => should.BeSuccessful());
 ```
 
-**Please note**, that when passing in URL, you need to encode your values.
+**Please note**, that when passing credentials in the URL, you need to encode your values.
 
 ### Custom headers
 ```csharp
-DoRequest
-	.Against("http://localhost:5984/mydb")
-	.WithHeader("X-Foo", "bar")
+When.Put(DbUrl, cfg => cfg
+    .WithHeader("foo", "bar"))
+	.WithHeader(h => h.Accept, "application/json"))
+    .TheResponse(should => should.BeSuccessful());
 ```
 
-### Validation & Expectations - HttpResponse.IsExpectedTo()
-The idea is that you use your prefered testing framework and the use `Requester` to help you validate your APIs. The methods: `UsingHeadAsync, UsingGetAsync, UsingPostAsync, UsingPutAsync, UsingDeleteAsync` all returns a `HttpResponse` which has a bunch of validation helpers.
-
-First, include the `namespace Requester.Validation`. Then access all validation/expectations helper using: `response.IsExpectedTo()`
+### Expectations
+The idea is that you can use whatever testing framework you want. Below, I'm using NUnit. But it could just as well be xUnit.
 
 ```csharp
-[xUnit.Fact]
-public void Should_be_able_to_get_json_document()
+[TestFixture(Description = "Little piece of candy shown, running against a CouchDB node")]
+public class Candy
 {
-	(await DoRequest
-		.Against("http://localhost:5984/mydb")
-		.UsingGetAsync("danielwertheim"))
-		.IsExpectedTo()
+    private const string DbUrl = "http://sa:test@localhost:5984/mydb/";
 
-	    .BeSuccessful()
-	    .HaveStatus(HttpStatusCode.OK)
-	    .BeJsonResponse()
-	    .HaveAnyContent()
-	    .HaveJsonConformingToSchema(@"{
-	        _id: {type: 'string', required: true},
-	        _rev: {type: 'string', required: true},
-	        name: {type: 'string'},
-	        address: {type: 'object', properties: {zip: {type: 'integer'}}},
-	        hobbies: {type: 'array', items: {type: 'string'}}
-	    }")
-	    .Match(new {_id = "danielwertheim", name = "Daniel Wertheim", hobbies = new [] {"Programming", "Running"}})
-	    .HaveSpecificValue("_id", "danielwertheim")
-	    .HaveSpecificValue("hobbies[0]", "Programming")
-	    .HaveSpecificValue("address.zip", 12345);
+    [Test]
+    public void Can_eat_candy_like_a_monster()
+    {
+        When.Put(DbUrl)
+            .TheResponse(should => should.BeSuccessful());
+
+        When.Put(DbUrl, cfg => cfg
+            .WithHeader(h => h.Accept, "application/json"))
+            .TheResponse(should => should.BeSuccessful());
+
+        When.Head(DbUrl)
+            .TheResponse(should => should.BeSuccessful());
+
+        When.PostOfJson(DbUrl, "{\"_id\":\"doc1\", \"name\": \"Daniel Wertheim\", \"address\":{\"street\":\"One way\", \"zip\":12345}, \"hobbies\":[\"programming\",\"running\"]}")
+            .TheResponse(should => should
+                .BeSuccessful()
+                .HaveStatus(HttpStatusCode.Created));
+
+        When.PutOfJson(DbUrl + "doc2", "{\"name\": \"Daniel Wertheim\", \"address\":{\"street\":\"Two way\", \"zip\":54321}, \"hobbies\":[\"programming\",\"running\"]}")
+            .TheResponse(should => should
+                .BeSuccessful()
+                .HaveStatus(HttpStatusCode.Created));
+
+        When.GetOfJson(DbUrl + "doc1")
+            .TheResponse(should => should
+                .BeSuccessful()
+                .BeJsonResponse()
+                .HaveJsonConformingToSchema(@"{
+                    _id: {type: 'string', required: true},
+                    _rev: {type: 'string', required: true},
+                    name: {type: 'string'},
+                    address: {type: 'object', properties: {zip: {type: 'integer'}}},
+                    hobbies: {type: 'array', items: {type: 'string'}}
+                }")
+                .Match(new {_id = "doc1", name = "Daniel Wertheim"}));
+
+        When.GetOfJson(DbUrl + "doc2")
+            .TheResponse(should => should
+                .BeSuccessful()
+                .BeJsonResponse()
+                .HaveSpecificValue("_id", "doc2")
+                .HaveSpecificValue("hobbies[0]", "programming")
+                .HaveSpecificValue("address.zip", 54321));
+
+        var doc1 = When.Head(DbUrl + "doc1").TheResponse(should => should.BeSuccessful());
+
+        When.Delete(DbUrl + "doc1?rev=" + doc1.ETag).TheResponse(should => should.BeSuccessful());
+    }
 }
 ```
 
-You can of course use `ContinueWith`:
+Violations will show in your test runner. The sample below violates `HaveJsonConformingToSchema`.
 
-```csharp
-await DoRequest
-	.Against("http://localhost:5984/mydb")
-	.UsingGetAsync()
-	.ContinueWith(t => t.Result.IsExpectedTo().BeSuccessful());
+```
+My_test_one failed
+
+Requester.Validation.RequesterAssertionException : Expected object to be conforming to specified JSON schema.
+Failed when inspecting 'address.street' due to 'Invalid type. Expected Integer but got String. Line 1, position 112.'
+
+RequestUri: http://localhost:5984/mydb/doc1
+RequestMethod: GET
+Status: OK(200)
+Reason: OK
+ETag: 1-23c4402e369a7a56059d912e53d320ee
+ContentType:application/json
+HasContent:True
+Content:<NOT BEING SHOWED>
 ```
 
+### HttpRequester
+The `HttpRequester` is what is used but the `When` constructs, and can of course be used to perform Http-requests.
+
+```csharp
+using(var requester = new HttpRequester("http://localhost:5984/mydb"))
+{
+  //Ensure db is created
+  await requester.SendAsync(new HttpRequest(HttpMethod.Put));
+
+  //Create a document
+  await requester.SendAsync(
+    new HttpRequest(HttpMethod.Put, "/mydocid").WithJsonContent(someJson));
+}
+```
+
+### HttpResponse
+The response of the `HttpRequester` is a `HttpResponse`.
+
+```csharp
+//Everything is a response (HEAD, GET, POST, PUT, DELETE)
+var get = await requester.SendAsync(new HttpRequest(HttpMethod.Get, "/mydocid"));
+
+//The resonse has like: StatusCode, Reason, Content, ETag, ContentType etc.
+Debug.WriteLine(get.ToStringDebugVersion(includeContent: true));
+```
+The out put would be:
+
+```
+RequestUri: http://localhost:5984/mydb/doc1
+RequestMethod: GET
+Status: OK(200)
+Reason: OK
+ETag: 1-23c4402e369a7a56059d912e53d320ee
+ContentType:application/json
+HasContent:True
+Content:{"_id":"doc1","_rev":"1-23c4402e369a7a56059d912e53d320ee","name":"Daniel Wertheim","address":{"street":"One way","zip":12345},"hobbies":["programming","running"]}
+```
+ 
 ### Custom testing framework assertion exceptions
 To keep down some dependencies, Requester throws a custom `RequesterAssertionException` but if you want your specific testing framework exceptions, just hook them in:
 
@@ -108,29 +174,4 @@ To keep down some dependencies, Requester throws a custom `RequesterAssertionExc
 AssertionExceptionFactory.ExceptionFn = msg => new NUnit.Framework.AssertionException(msg);
 ```
 
-### Override some static default configurations
-There are some static extension points you can make use of to customize behavior and to hook in custom implementations.
 
-```csharp
-//Default encoding
-DoRequest.DefaultEncoding = Encoding.UTF8;
-
-//Custom initializer
-DoRequest.Initializer = request => request.WithAccept(i => i.ApplicationJson);
-
-//Hook in your custom IDoRequest implementation
-DoRequest.Factory = uri => new MyIDoRequestImplementation(uri);
-```
-
-### Reuse the IDoRequest
-The methods: `HeadAsync, GetAsync, PostAsync, PutAsync, DeleteAsync` all returns a `HttpResponse`. All other methods returns an `IDoRequest` instance. You can therefore reuse it if you want.
-
-```csharp
-var iDoRequest = DoRequest.Against("http://localhost:5984/mydb");
-
-var dbCreatedResponse = await iDoRequest.UsingPutAsync();
-
-var docCreatedResponse = await iDoRequest.UsingPutAsync(@"{""name"":""Daniel Wertheim""}", "danielwertheim");
-
-var deleteDocResponse = await iDoRequest.UsingDeleteAsync("danielwertheim?rev=" + docCreatedResponse.ETag);
-```
