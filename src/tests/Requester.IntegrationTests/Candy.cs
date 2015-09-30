@@ -9,7 +9,7 @@ namespace Requester.IntegrationTests
 {
     public class Candy : IDisposable
     {
-        private const string DbUrl = "http://sa:test@ci01:5984/mydb/";
+        private const string DbUrl = "http://developer:1q2w3e4r@development:5984/mydb/";
         private readonly HttpRequester _requester;
 
         public Candy()
