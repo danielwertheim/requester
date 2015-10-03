@@ -46,10 +46,9 @@ gulp.task('clean', function(cb) {
 
 gulp.task('assemblyinfo', function() {
   return gulp
-    .src(config.src + 'SharedAssemblyInfo.cs')
+    .src(config.src + 'GlobalAssemblyInfo.cs')
     .pipe(assemblyInfo({
-      version: config.build.version,
-      fileVersion: config.build.version + '.' + config.build.revision,
+      version: config.build.version + '.' + config.build.revision
     }))
     .pipe(gulp.dest(config.src));
 });
@@ -57,7 +56,7 @@ gulp.task('assemblyinfo', function() {
 gulp.task('build', function() {
   return gulp.src(config.src + '*.sln')
     .pipe(msbuild({
-      toolsVersion: 12.0,
+      toolsVersion: 14.0,
       configuration: config.build.profile,
       targets: ['Clean', 'Build'],
       errorOnFail: true,
@@ -74,7 +73,7 @@ gulp.task('copy', function() {
 
 gulp.task('integration-tests', function () {
   return gulp.src(config.src + 'tests/**/bin/' + config.build.profile + '/*.IntegrationTests.dll')
-    .pipe(shell('xunit.console.exe <%= file.path %> -noshadow', { cwd: './tools/xunit.runner.console.2.0.0/tools/' }));
+    .pipe(shell('xunit.console.exe <%= file.path %> -noshadow', { cwd: './tools/xunit.runner.console.2.1.0/tools/' }));
 });
 
 gulp.task('nuget-pack', shell.task([
