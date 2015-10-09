@@ -5,9 +5,9 @@ namespace Requester.Validation
 {
     public class HttpResponseValidation
     {
-        public HttpResponse Response { get; private set; }
+        public HttpTextResponse Response { get; private set; }
 
-        public HttpResponseValidation(HttpResponse response)
+        public HttpResponseValidation(HttpTextResponse response)
         {
             if(response == null)
                 throw AssertionExceptionFactory.Create("Expected response to be an instance, but got NULL.");

@@ -26,7 +26,7 @@ namespace Requester.Validation
             return ExceptionFn(message);
         }
 
-        public static Exception Create(HttpResponse response, string format, params object[] args)
+        public static Exception Create(HttpTextResponse response, string format, params object[] args)
         {
             var message = args == null || !args.Any()
                 ? format

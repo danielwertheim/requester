@@ -2,26 +2,35 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using EnsureThat;
+using Requester.Http;
 
-namespace Requester.Http
+namespace Requester
 {
     public class HttpRequest
     {
         public HttpMethod Method { get; private set; }
         public string RelativeUrl { get; private set; }
-        public IDictionary<string, string> Headers { get; private set; }
+        public IDictionary<string, string> Headers { get; }
         public HttpContent Content { get; private set; }
 
-        public HttpRequest(HttpMethod method) : this(method, "/") { }
-
-        public HttpRequest(HttpMethod method, string relativeUrl)
+        public HttpRequest(HttpMethod method, string relativeUrl = null)
         {
-            Ensure.That(relativeUrl, "relativeUrl").IsNotNullOrWhiteSpace();
-
-            RelativeUrl = relativeUrl;
+            RelativeUrl = FixRelativeUrl(relativeUrl);
             Method = method;
-            Headers = new Dictionary<string, string> { { HttpHeaders.Instance.Accept, HttpContentTypes.Instance.ApplicationJson } };
+            Headers = new Dictionary<string, string>
+            {
+                { HttpHeaders.Instance.Accept, HttpContentTypes.Instance.ApplicationJson }
+            };
+        }
+
+        private string FixRelativeUrl(string relativeUrl = null)
+        {
+            if (relativeUrl == null)
+                return "/";
+
+            return relativeUrl.StartsWith("/")
+                ? relativeUrl
+                : $"/{relativeUrl}";
         }
 
         public virtual HttpRequest WithAccept(Func<HttpContentTypes, string> picker)
