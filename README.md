@@ -1,3 +1,5 @@
+[![Nuget](https://img.shields.io/nuget/v/requester.svg)](https://www.nuget.org/packages/requester/) [![Users](https://img.shields.io/nuget/dt/requester.svg)](https://www.nuget.org/packages/requester/)
+
 # Requester
 Requester is a Http-request fiddling magical something that is designed to help me, and maybe you as well, to validate APIs. It's mainly focused on APIs that work with JSON. It was put together after some fiddling with an awesome NodeJS peer: [FrisbyJS](http://frisbyjs.com/ "FrisbyJS").
 
@@ -137,6 +139,15 @@ The `HttpRequester` is what is used but the `When` constructs, and can of course
 	  //Create a document
 	  await requester.SendAsync(
 	    new HttpRequest(HttpMethod.Put, "/mydocid").WithJsonContent(someJson));
+		
+	  //Our using simplified overloads...
+	  await requester.PostAsync();
+	  await requester.PostContentAsync(json);
+	  await requester.PostContentAsync(new { _id = "doc2" Name = "Foo" });
+	  
+	  await requester.PutAsync();
+	  await requester.PutContentAsync(json, "/doc3");
+	  await requester.PutContentAsync(new { Name = "Foo" }, "/doc4");
 	}
 
 ### HttpResponse
