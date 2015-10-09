@@ -111,9 +111,20 @@ namespace Requester
             return DoSendForEntityResponseAsync<TEntity>(request);
         }
 
-        public Task<HttpTextResponse> PostAsync(string content = null, string relativeUrl = null)
+        public Task<HttpTextResponse> PostAsync(string relativeUrl = null)
         {
             ThrowIfDisposed();
+
+            var request = new HttpRequest(HttpMethod.Post, relativeUrl);
+
+            return DoSendForTextResponseAsync(request);
+        }
+
+        public Task<HttpTextResponse> PostContentAsync(string content, string relativeUrl = null)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(content, "content").IsNotNullOrWhiteSpace();
 
             var request = new HttpRequest(HttpMethod.Post, relativeUrl)
                 .WithJsonContent(content);
@@ -121,9 +132,11 @@ namespace Requester
             return DoSendForTextResponseAsync(request);
         }
 
-        public Task<HttpTextResponse> PostAsync<TEntity>(TEntity entity, string relativeUrl = null) where TEntity : class
+        public Task<HttpTextResponse> PostContentAsync<TEntity>(TEntity entity, string relativeUrl = null) where TEntity : class
         {
             ThrowIfDisposed();
+
+            Ensure.That(entity, "entity").IsNotNull();
 
             var request = new HttpRequest(HttpMethod.Post, relativeUrl)
                 .WithJsonContent(JsonSerializer.Serialize(entity));
@@ -131,7 +144,7 @@ namespace Requester
             return DoSendForTextResponseAsync(request);
         }
 
-        public Task<HttpEntityResponse<TEntityOut>> PostAsync<TEntityIn, TEntityOut>(TEntityIn entity, string relativeUrl = null) where TEntityIn : class where TEntityOut : class
+        public Task<HttpEntityResponse<TEntityOut>> PostContentAsync<TEntityIn, TEntityOut>(TEntityIn entity, string relativeUrl = null) where TEntityIn : class where TEntityOut : class
         {
             ThrowIfDisposed();
 
@@ -141,9 +154,20 @@ namespace Requester
             return DoSendForEntityResponseAsync<TEntityOut>(request);
         }
 
-        public Task<HttpTextResponse> PutAsync(string content = null, string relativeUrl = null)
+        public Task<HttpTextResponse> PutAsync(string relativeUrl = null)
         {
             ThrowIfDisposed();
+
+            var request = new HttpRequest(HttpMethod.Put, relativeUrl);
+
+            return DoSendForTextResponseAsync(request);
+        }
+
+        public Task<HttpTextResponse> PutContentAsync(string content, string relativeUrl = null)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(content, "content").IsNotNullOrWhiteSpace();
 
             var request = new HttpRequest(HttpMethod.Put, relativeUrl)
                 .WithJsonContent(content);
@@ -151,9 +175,11 @@ namespace Requester
             return DoSendForTextResponseAsync(request);
         }
 
-        public Task<HttpTextResponse> PutAsync<TEntity>(TEntity entity, string relativeUrl = null) where TEntity : class
+        public Task<HttpTextResponse> PutContentAsync<TEntity>(TEntity entity, string relativeUrl = null) where TEntity : class
         {
             ThrowIfDisposed();
+
+            Ensure.That(entity, "entity").IsNotNull();
 
             var request = new HttpRequest(HttpMethod.Put, relativeUrl)
                 .WithJsonContent(JsonSerializer.Serialize(entity));
@@ -161,7 +187,7 @@ namespace Requester
             return DoSendForTextResponseAsync(request);
         }
 
-        public Task<HttpEntityResponse<TEntityOut>> PutAsync<TEntityIn, TEntityOut>(TEntityIn entity, string relativeUrl = null) where TEntityIn : class where TEntityOut : class
+        public Task<HttpEntityResponse<TEntityOut>> PutContentAsync<TEntityIn, TEntityOut>(TEntityIn entity, string relativeUrl = null) where TEntityIn : class where TEntityOut : class
         {
             ThrowIfDisposed();
 
