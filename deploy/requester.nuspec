@@ -17,8 +17,8 @@
         </frameworkAssemblies>
         <dependencies>
            <group targetFramework="net452">
-             <dependency id="Ensure.That" version="2.0.0" />
-             <dependency id="Newtonsoft.Json" version="6.0.8" />
+             <dependency id="Ensure.That" version="3.2.0" />
+             <dependency id="Newtonsoft.Json" version="7.0.1" />
            </group>
         </dependencies>
     </metadata>

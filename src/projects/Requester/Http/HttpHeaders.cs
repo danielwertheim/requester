@@ -4,9 +4,9 @@ namespace Requester.Http
     {
         public static HttpHeaders Instance { get; private set; }
 
-        public string Accept { get { return "Accept"; } }
-        public string Authorization { get { return "Authorization"; } }
-        public string IfMatch { get { return "If-Match"; } }
+        public string Accept => "Accept";
+        public string Authorization => "Authorization";
+        public string IfMatch => "If-Match";
 
         static HttpHeaders()
         {
