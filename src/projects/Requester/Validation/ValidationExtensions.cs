@@ -5,7 +5,7 @@ namespace Requester.Validation
 {
     public static class ValidationExtensions
     {
-        public static HttpResponse TheResponse(this HttpResponse response, Action<HttpResponseValidation> should)
+        public static HttpTextResponse TheResponse(this HttpTextResponse response, Action<HttpResponseValidation> should)
         {
             should(new HttpResponseValidation(response));
 

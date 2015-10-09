@@ -4,11 +4,11 @@ namespace Requester.Http
     {
         public static HttpContentTypes Instance { get; private set; }
 
-        public string ApplicationJavaScript { get { return "application/javascript"; } }
-        public string ApplicationJson { get { return "application/json"; } }
-        public string ApplicationJsonLd { get { return "application/ld+json"; } }
-        public string ApplicationGeoJson { get { return "application/vnd.geo+json"; } }
-        public string TextJson { get { return "text/json"; } }
+        public string ApplicationJavaScript => "application/javascript";
+        public string ApplicationJson => "application/json";
+        public string ApplicationJsonLd => "application/ld+json";
+        public string ApplicationGeoJson => "application/vnd.geo+json";
+        public string TextJson => "text/json";
 
         static HttpContentTypes()
         {
