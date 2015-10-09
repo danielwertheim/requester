@@ -120,7 +120,7 @@ namespace Requester
             return DoSendForTextResponseAsync(request);
         }
 
-        public Task<HttpTextResponse> PostContentAsync(string content, string relativeUrl = null)
+        public Task<HttpTextResponse> PostJsonAsync(string content, string relativeUrl = null)
         {
             ThrowIfDisposed();
 
@@ -132,7 +132,7 @@ namespace Requester
             return DoSendForTextResponseAsync(request);
         }
 
-        public Task<HttpTextResponse> PostContentAsync<TEntity>(TEntity entity, string relativeUrl = null) where TEntity : class
+        public Task<HttpTextResponse> PostEntityAsync(object entity, string relativeUrl = null)
         {
             ThrowIfDisposed();
 
@@ -144,9 +144,11 @@ namespace Requester
             return DoSendForTextResponseAsync(request);
         }
 
-        public Task<HttpEntityResponse<TEntityOut>> PostContentAsync<TEntityIn, TEntityOut>(TEntityIn entity, string relativeUrl = null) where TEntityIn : class where TEntityOut : class
+        public Task<HttpEntityResponse<TEntityOut>> PostEntityAsync<TEntityOut>(object entity, string relativeUrl = null) where TEntityOut : class
         {
             ThrowIfDisposed();
+
+            Ensure.That(entity, "entity").IsNotNull();
 
             var request = new HttpRequest(HttpMethod.Post, relativeUrl)
                 .WithJsonContent(JsonSerializer.Serialize(entity));
@@ -163,7 +165,7 @@ namespace Requester
             return DoSendForTextResponseAsync(request);
         }
 
-        public Task<HttpTextResponse> PutContentAsync(string content, string relativeUrl = null)
+        public Task<HttpTextResponse> PutJsonAsync(string content, string relativeUrl = null)
         {
             ThrowIfDisposed();
 
@@ -175,7 +177,7 @@ namespace Requester
             return DoSendForTextResponseAsync(request);
         }
 
-        public Task<HttpTextResponse> PutContentAsync<TEntity>(TEntity entity, string relativeUrl = null) where TEntity : class
+        public Task<HttpTextResponse> PutEntityAsync(object entity, string relativeUrl = null)
         {
             ThrowIfDisposed();
 
@@ -187,7 +189,7 @@ namespace Requester
             return DoSendForTextResponseAsync(request);
         }
 
-        public Task<HttpEntityResponse<TEntityOut>> PutContentAsync<TEntityIn, TEntityOut>(TEntityIn entity, string relativeUrl = null) where TEntityIn : class where TEntityOut : class
+        public Task<HttpEntityResponse<TEntityOut>> PutEntityAsync<TEntityOut>(object entity, string relativeUrl = null) where TEntityOut : class
         {
             ThrowIfDisposed();
 

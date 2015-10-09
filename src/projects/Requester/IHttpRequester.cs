@@ -17,13 +17,13 @@ namespace Requester
         Task<HttpEntityResponse<TEntity>> GetAsync<TEntity>(string relativeUrl = null) where TEntity : class;
 
         Task<HttpTextResponse> PostAsync(string relativeUrl = null);
-        Task<HttpTextResponse> PostContentAsync(string content, string relativeUrl = null);
-        Task<HttpTextResponse> PostContentAsync<TEntity>(TEntity entity, string relativeUrl = null) where TEntity : class;
-        Task<HttpEntityResponse<TEntityOut>> PostContentAsync<TEntityIn, TEntityOut>(TEntityIn entity, string relativeUrl = null) where TEntityIn : class where TEntityOut : class;
+        Task<HttpTextResponse> PostJsonAsync(string content, string relativeUrl = null);
+        Task<HttpTextResponse> PostEntityAsync(object entity, string relativeUrl = null);
+        Task<HttpEntityResponse<TEntityOut>> PostEntityAsync<TEntityOut>(object entity, string relativeUrl = null) where TEntityOut : class;
 
         Task<HttpTextResponse> PutAsync(string relativeUrl = null);
-        Task<HttpTextResponse> PutContentAsync(string content, string relativeUrl = null);
-        Task<HttpTextResponse> PutContentAsync<TEntity>(TEntity entity, string relativeUrl = null) where TEntity : class;
-        Task<HttpEntityResponse<TEntityOut>> PutContentAsync<TEntityIn, TEntityOut>(TEntityIn entity, string relativeUrl = null) where TEntityIn : class where TEntityOut : class;
+        Task<HttpTextResponse> PutJsonAsync(string content, string relativeUrl = null);
+        Task<HttpTextResponse> PutEntityAsync(object entity, string relativeUrl = null);
+        Task<HttpEntityResponse<TEntityOut>> PutEntityAsync<TEntityOut>(object entity, string relativeUrl = null) where TEntityOut : class;
     }
 }
