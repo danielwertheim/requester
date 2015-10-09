@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Requester.Validation;
@@ -83,7 +81,7 @@ namespace Requester.IntegrationTests
                 .TheResponse(should => should.BeSuccessful());
 
             var postDocResponse = _dbRequester
-                .PostContentAsync("{\"_id\":\"doc1\", \"name\": \"Daniel Wertheim\", \"address\":{\"street\":\"One way\", \"zip\":12345}, \"hobbies\":[\"programming\",\"running\"]}")
+                .PostJsonAsync("{\"_id\":\"doc1\", \"name\": \"Daniel Wertheim\", \"address\":{\"street\":\"One way\", \"zip\":12345}, \"hobbies\":[\"programming\",\"running\"]}")
                 .Result;
             postDocResponse
                 .TheResponse(should => should
@@ -91,7 +89,7 @@ namespace Requester.IntegrationTests
                     .HaveStatus(HttpStatusCode.Created));
 
             var postEntityResponse = _dbRequester
-                .PostContentAsync(new { _id = "ent1", Name = "Daniel Wertheim", Address = new { Street = "One way", Zip = 12345 }, Hobbies = new[] { "programming", "running" } })
+                .PostEntityAsync(new { _id = "ent1", Name = "Daniel Wertheim", Address = new { Street = "One way", Zip = 12345 }, Hobbies = new[] { "programming", "running" } })
                 .Result;
             postEntityResponse
                 .TheResponse(should => should
@@ -99,7 +97,7 @@ namespace Requester.IntegrationTests
                     .HaveStatus(HttpStatusCode.Created));
 
             var putDocResponse = _dbRequester
-                .PutContentAsync("{\"name\": \"John Doe\", \"address\":{\"street\":\"Two way\", \"zip\":54321}, \"hobbies\":[\"programming\",\"running\"]}", "/doc2")
+                .PutJsonAsync("{\"name\": \"John Doe\", \"address\":{\"street\":\"Two way\", \"zip\":54321}, \"hobbies\":[\"programming\",\"running\"]}", "/doc2")
                 .Result;
             putDocResponse
                 .TheResponse(should => should
@@ -107,7 +105,7 @@ namespace Requester.IntegrationTests
                     .HaveStatus(HttpStatusCode.Created));
 
             var putEntityResponse = _dbRequester
-                .PutContentAsync(new { Name = "John Doe", Address = new { Street = "One way", Zip = 54321 }, Hobbies = new[] { "programming", "running" } }, "/ent2")
+                .PutEntityAsync(new { Name = "John Doe", Address = new { Street = "One way", Zip = 54321 }, Hobbies = new[] { "programming", "running" } }, "/ent2")
                 .Result;
             putEntityResponse
                 .TheResponse(should => should
