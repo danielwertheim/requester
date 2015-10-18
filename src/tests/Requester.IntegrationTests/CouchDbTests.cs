@@ -7,15 +7,17 @@ using Xunit;
 
 namespace Requester.IntegrationTests
 {
-    public class Candy : IDisposable
+    public class CouchDbTests : IDisposable
     {
         private const string DbUrl = "http://developer:1q2w3e4r@development:5984/mydb/";
         private readonly HttpRequester _dbRequester;
 
-        public Candy()
+        public CouchDbTests()
         {
             _dbRequester = new HttpRequester(DbUrl);
-            _dbRequester.DeleteAsync().Wait();
+            var head = _dbRequester.HeadAsync().Result;
+            if(head.IsSuccess)
+                _dbRequester.DeleteAsync().Wait();
         }
 
         public void Dispose()

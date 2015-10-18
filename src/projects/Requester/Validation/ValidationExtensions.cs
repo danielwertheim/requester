@@ -10,5 +10,13 @@ namespace Requester.Validation
 
             return response;
         }
+
+        //TODO: Fix
+        //public static HttpTextResponse TheResponse<TEntity>(this HttpEntityResponse<TEntity> response, Action<HttpResponseValidation> should) where TEntity : class
+        //{
+        //    should(new HttpResponseValidation(response));
+
+        //    return response;
+        //}
     }
 }

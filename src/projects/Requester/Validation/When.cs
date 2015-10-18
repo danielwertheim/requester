@@ -11,6 +11,8 @@ namespace Requester.Validation
     /// </summary>
     public class When
     {
+        public static Func<HttpMessageHandler> MessageHandlerFn { private get; set; }
+
         public static HttpTextResponse Head(string url, Action<HttpRequest> configurer = null)
         {
             return DoRequest(HttpMethod.Head, url, configurer);
@@ -65,7 +67,7 @@ namespace Requester.Validation
 
             var request = new HttpRequest(method);
 
-            using (var requester = new HttpRequester(url))
+            using (var requester = new HttpRequester(url, MessageHandlerFn?.Invoke()))
             {
                 var content = contentFn?.Invoke(requester.JsonSerializer);
                 if (!string.IsNullOrWhiteSpace(content))
