@@ -15,7 +15,9 @@ namespace Requester.IntegrationTests
         public Candy()
         {
             _dbRequester = new HttpRequester(DbUrl);
-            _dbRequester.DeleteAsync().Wait();
+            var head = _dbRequester.HeadAsync().Result;
+            if(head.IsSuccess)
+                _dbRequester.DeleteAsync().Wait();
         }
 
         public void Dispose()

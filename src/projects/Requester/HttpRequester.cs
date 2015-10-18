@@ -19,12 +19,12 @@ namespace Requester
         public IJsonSerializer JsonSerializer { get; set; }
         public TimeSpan Timeout => HttpClient.Timeout;
 
-        public HttpRequester(string url)
+        public HttpRequester(string url, HttpMessageHandler handler = null)
         {
             Ensure.That(url, "uri").IsNotNullOrWhiteSpace();
 
             JsonSerializer = new DefaultJsonSerializer();
-            HttpClient = CreateHttpClient(url);
+            HttpClient = CreateHttpClient(url, handler);
         }
 
         public void Dispose()
@@ -53,14 +53,11 @@ namespace Requester
                 throw new ObjectDisposedException(GetType().Name);
         }
 
-        protected HttpClient CreateHttpClient(string url)
+        protected HttpClient CreateHttpClient(string url, HttpMessageHandler handler = null)
         {
             var tmpUri = new Uri(url);
 
-            var handler = new HttpClientHandler
-            {
-                AllowAutoRedirect = false
-            };
+            handler = handler ?? CreateDefaultHandler();
 
             var client = new HttpClient(handler, true)
             {
@@ -73,6 +70,14 @@ namespace Requester
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicAuthString.Value);
 
             return client;
+        }
+
+        private static HttpClientHandler CreateDefaultHandler()
+        {
+            return new HttpClientHandler
+            {
+                AllowAutoRedirect = false
+            };
         }
 
         public Task<HttpTextResponse> DeleteAsync(string relativeUrl = null)
