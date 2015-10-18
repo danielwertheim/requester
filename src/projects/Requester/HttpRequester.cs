@@ -19,9 +19,11 @@ namespace Requester
         public IJsonSerializer JsonSerializer { get; set; }
         public TimeSpan Timeout => HttpClient.Timeout;
 
+        public HttpRequester(Uri uri, HttpMessageHandler handler = null) : this(uri.ToString(), handler) {}
+
         public HttpRequester(string url, HttpMessageHandler handler = null)
         {
-            Ensure.That(url, "uri").IsNotNullOrWhiteSpace();
+            Ensure.That(url, "url").IsNotNullOrWhiteSpace();
 
             JsonSerializer = new DefaultJsonSerializer();
             HttpClient = CreateHttpClient(url, handler);
