@@ -8,6 +8,7 @@ using Xunit;
 
 namespace Requester.IntegrationTests
 {
+    [Collection("In mem WebAPI tests")]
     public class InMemWebApiTests : IDisposable
     {
         private TestServer _server;
@@ -15,6 +16,7 @@ namespace Requester.IntegrationTests
         public InMemWebApiTests()
         {
             _server = TestServer.Create<Startup>();
+            _server.BaseAddress = new Uri("http://ce73f0a3bc6f476995dd88dc14f60066");
             When.MessageHandlerFn = () => _server.Handler;
         }
 

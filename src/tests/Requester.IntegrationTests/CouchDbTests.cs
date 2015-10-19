@@ -7,6 +7,7 @@ using Xunit;
 
 namespace Requester.IntegrationTests
 {
+    [Collection("CouchDB tests")]
     public class CouchDbTests : IDisposable
     {
         private const string DbUrl = "http://developer:1q2w3e4r@development:5984/mydb/";
