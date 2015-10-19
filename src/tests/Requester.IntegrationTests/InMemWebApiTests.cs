@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Requester.IntegrationTests
 {
-    [Collection("In mem WebAPI tests")]
+    [Collection("CI FIX")]
     public class InMemWebApiTests : IDisposable
     {
         private TestServer _server;
