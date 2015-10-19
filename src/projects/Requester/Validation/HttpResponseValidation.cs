@@ -1,11 +1,10 @@
 using System.Net;
-using Requester.Http;
 
 namespace Requester.Validation
 {
     public class HttpResponseValidation
     {
-        public HttpTextResponse Response { get; private set; }
+        public HttpTextResponse Response { get; }
 
         public HttpResponseValidation(HttpTextResponse response)
         {
