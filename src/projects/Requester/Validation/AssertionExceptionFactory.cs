@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Requester.Http;
 
 namespace Requester.Validation
 {
@@ -26,13 +25,13 @@ namespace Requester.Validation
             return ExceptionFn(message);
         }
 
-        public static Exception Create(HttpTextResponse response, string format, params object[] args)
+        public static Exception CreateForResponse<TResponse>(TResponse response, string format, params object[] args) where TResponse : HttpResponse
         {
             var message = args == null || !args.Any()
                 ? format
                 : string.Format(format, args);
 
-            return ExceptionFn(string.Format("{0}{1}{2}", message, Environment.NewLine, response.ToStringDebugVersion()));
+            return ExceptionFn($"{message}{Environment.NewLine}{response.ToStringDebugVersion()}");
         }
     }
 }

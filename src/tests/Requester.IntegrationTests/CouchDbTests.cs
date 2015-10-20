@@ -7,7 +7,6 @@ using Xunit;
 
 namespace Requester.IntegrationTests
 {
-    [Collection("CI FIX")]
     public class CouchDbTests : IDisposable
     {
         private const string DbUrl = "http://developer:1q2w3e4r@development:5984/mydb/";
@@ -92,7 +91,17 @@ namespace Requester.IntegrationTests
                     .HaveStatus(HttpStatusCode.Created));
 
             var postEntityResponse = _dbRequester
-                .PostEntityAsync(new { _id = "ent1", Name = "Daniel Wertheim", Address = new { Street = "One way", Zip = 12345 }, Hobbies = new[] { "programming", "running" } })
+                .PostEntityAsync(new
+                {
+                    _id = "ent1",
+                    Name = "Daniel Wertheim",
+                    Address = new
+                    {
+                        Street = "One way",
+                        Zip = 12345
+                    },
+                    Hobbies = new[] { "programming", "running" }
+                })
                 .Result;
             postEntityResponse
                 .TheResponse(should => should
@@ -108,7 +117,16 @@ namespace Requester.IntegrationTests
                     .HaveStatus(HttpStatusCode.Created));
 
             var putEntityResponse = _dbRequester
-                .PutEntityAsync(new { Name = "John Doe", Address = new { Street = "One way", Zip = 54321 }, Hobbies = new[] { "programming", "running" } }, "/ent2")
+                .PutEntityAsync(new
+                {
+                    Name = "John Doe",
+                    Address = new
+                    {
+                        Street = "One way",
+                        Zip = 54321
+                    },
+                    Hobbies = new[] { "programming", "running" }
+                }, "/ent2")
                 .Result;
             putEntityResponse
                 .TheResponse(should => should
