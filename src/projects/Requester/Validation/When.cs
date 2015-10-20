@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Runtime.Remoting.Messaging;
 using EnsureThat;
 
 namespace Requester.Validation
@@ -11,7 +12,19 @@ namespace Requester.Validation
     /// </summary>
     public class When
     {
-        public static Func<HttpMessageHandler> MessageHandlerFn { private get; set; }
+        private const string MessageHandlerFnPropName = "MessageHandlerFn@When";
+
+        public static Func<HttpMessageHandler> MessageHandlerFn
+        {
+            get
+            {
+                return CallContext.LogicalGetData(MessageHandlerFnPropName) as Func<HttpMessageHandler>;
+            }
+            set
+            {
+                CallContext.LogicalSetData(MessageHandlerFnPropName, value);
+            }
+        }
 
         public static HttpTextResponse Head(string url, Action<HttpRequest> configurer = null)
         {
@@ -21,6 +34,11 @@ namespace Requester.Validation
         public static HttpTextResponse Put(string url, Action<HttpRequest> configurer = null)
         {
             return DoRequest(HttpMethod.Put, url, configurer);
+        }
+
+        public static HttpTextResponse Post(string url, Action<HttpRequest> configurer = null)
+        {
+            return DoRequest(HttpMethod.Post, url, configurer);
         }
 
         public static HttpTextResponse Delete(string url, Action<HttpRequest> configurer = null)
