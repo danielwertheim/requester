@@ -1,13 +1,12 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
-using Requester.Http;
 
 namespace Requester.Validation
 {
     public class JsonHttpResponseValidation
     {
-        public HttpTextResponse Response { get; private set; }
+        public HttpTextResponse Response { get; }
 
         public JsonHttpResponseValidation(HttpTextResponse response)
         {
@@ -15,7 +14,7 @@ namespace Requester.Validation
                 throw AssertionExceptionFactory.Create("Expected response to be an instance, but got NULL.");
 
             if (response.ContentType != "application/json")
-                throw AssertionExceptionFactory.Create(response, "Expected response content type to be '{0}', but got '{1}'.", NullString.IfNull(response.ContentType));
+                throw AssertionExceptionFactory.CreateForResponse(response, "Expected response content type to be '{0}', but got '{1}'.", NullString.IfNull(response.ContentType));
 
             Response = response;
         }
@@ -24,7 +23,7 @@ namespace Requester.Validation
         {
             var o = JsonConvert.DeserializeObject<T>(Response.Content);
             if (o == null)
-                throw AssertionExceptionFactory.Create(Response, "Expected response content to match sent entity, but it deserialized to '{0}'", NullString.Value);
+                throw AssertionExceptionFactory.CreateForResponse(Response, "Expected response content to match sent entity, but it deserialized to '{0}'", NullString.Value);
 
             o.ShouldBeValueEqualTo(entity);
 
@@ -34,7 +33,7 @@ namespace Requester.Validation
         public JsonHttpResponseValidation HaveAnyContent()
         {
             if(string.IsNullOrWhiteSpace(Response.Content))
-                throw AssertionExceptionFactory.Create(Response, "Expected response content to NOT be: NULL, Empty or WhiteSpace.");
+                throw AssertionExceptionFactory.CreateForResponse(Response, "Expected response content to NOT be: NULL, Empty or WhiteSpace.");
 
             return this;
         }
@@ -43,10 +42,10 @@ namespace Requester.Validation
         {
             var node = JToken.Parse(Response.Content).SelectToken(path, false);
             if (node == null)
-                throw AssertionExceptionFactory.Create(Response, "Expected sent path '{0}' to map to a node in the JSON document, but it did not.", path);
+                throw AssertionExceptionFactory.CreateForResponse(Response, "Expected sent path '{0}' to map to a node in the JSON document, but it did not.", path);
 
             if(!Equals(node.Value<T>(), expectedValue))
-                throw AssertionExceptionFactory.Create(Response, "Expected sent path '{0}' to return '{1}', but got '{2}'.", path, expectedValue, node.Value<T>());
+                throw AssertionExceptionFactory.CreateForResponse(Response, "Expected sent path '{0}' to return '{1}', but got '{2}'.", path, expectedValue, node.Value<T>());
 
             return this;
         }
@@ -62,7 +61,7 @@ namespace Requester.Validation
             var schema = JsonSchema.Parse("{type: 'object', properties:" + properties + "}");
             JToken.Parse(Response.Content).Validate(schema, (sender, args) =>
             {
-                throw AssertionExceptionFactory.Create(Response,
+                throw AssertionExceptionFactory.CreateForResponse(Response,
                     "Expected object to be conforming to specified JSON schema. Failed when inspecting '{0}' due to '{1}'", args.Path, args.Message);
             });
 
