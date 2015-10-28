@@ -19,7 +19,7 @@ namespace Requester
             Method = method;
             Headers = new Dictionary<string, string>
             {
-                { HttpHeaders.Instance.Accept, HttpContentTypes.Instance.ApplicationJson }
+                { HttpRequesterHeaders.Instance.Accept, HttpContentTypes.Instance.ApplicationJson }
             };
         }
 
@@ -40,17 +40,17 @@ namespace Requester
 
         public virtual HttpRequest WithAccept(string value)
         {
-            return WithHeader(HttpHeaders.Instance.Accept, value);
+            return WithHeader(HttpRequesterHeaders.Instance.Accept, value);
         }
 
         public virtual HttpRequest WithIfMatch(string value)
         {
-            return WithHeader(HttpHeaders.Instance.IfMatch, value);
+            return WithHeader(HttpRequesterHeaders.Instance.IfMatch, value);
         }
 
-        public virtual HttpRequest WithHeader(Func<HttpHeaders, string> picker, string value)
+        public virtual HttpRequest WithHeader(Func<HttpRequesterHeaders, string> picker, string value)
         {
-            return WithHeader(picker(HttpHeaders.Instance), value);
+            return WithHeader(picker(HttpRequesterHeaders.Instance), value);
         }
 
         public virtual HttpRequest WithHeader(string name, string value)
@@ -60,6 +60,16 @@ namespace Requester
             return this;
         }
 
+        public virtual HttpRequest WithAuthorization(string value)
+        {
+            return WithHeader(HttpRequesterHeaders.Instance.Authorization, value);
+        }
+
+        public virtual HttpRequest WithBearer(string value)
+        {
+            return WithHeader(HttpRequesterHeaders.Instance.Authorization, "Bearer " + value);
+        }
+
         public virtual HttpRequest WithBasicAuthorization(string username, string password)
         {
             return WithBasicAuthorization(new BasicAuthorizationString(username, password));
@@ -67,9 +77,7 @@ namespace Requester
 
         public virtual HttpRequest WithBasicAuthorization(BasicAuthorizationString value)
         {
-            WithHeader(HttpHeaders.Instance.Authorization, value);
-
-            return this;
+            return WithHeader(HttpRequesterHeaders.Instance.Authorization, value);
         }
 
         public virtual HttpRequest WithContent(byte[] content, Func<HttpContentTypes, string> picker)
