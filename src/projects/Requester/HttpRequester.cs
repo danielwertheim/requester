@@ -82,6 +82,53 @@ namespace Requester
             };
         }
 
+        public virtual IHttpRequester WithAccept(Func<HttpContentTypes, string> picker)
+        {
+            return WithAccept(picker(HttpContentTypes.Instance));
+        }
+
+        public virtual IHttpRequester WithAccept(string value)
+        {
+            return WithHeader(HttpRequesterHeaders.Instance.Accept, value);
+        }
+
+        public virtual IHttpRequester WithIfMatch(string value)
+        {
+            return WithHeader(HttpRequesterHeaders.Instance.IfMatch, value);
+        }
+
+        public virtual IHttpRequester WithHeader(Func<HttpRequesterHeaders, string> picker, string value)
+        {
+            return WithHeader(picker(HttpRequesterHeaders.Instance), value);
+        }
+
+        public virtual IHttpRequester WithHeader(string name, string value)
+        {
+            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(name, value);
+
+            return this;
+        }
+
+        public virtual IHttpRequester WithAuthorization(string value)
+        {
+            return WithHeader(HttpRequesterHeaders.Instance.Authorization, value);
+        }
+
+        public virtual IHttpRequester WithBearer(string value)
+        {
+            return WithHeader(HttpRequesterHeaders.Instance.Authorization, "Bearer " + value);
+        }
+
+        public virtual IHttpRequester WithBasicAuthorization(string username, string password)
+        {
+            return WithBasicAuthorization(new BasicAuthorizationString(username, password));
+        }
+
+        public virtual IHttpRequester WithBasicAuthorization(BasicAuthorizationString value)
+        {
+            return WithHeader(HttpRequesterHeaders.Instance.Authorization, value);
+        }
+
         public Task<HttpTextResponse> DeleteAsync(string relativeUrl = null)
         {
             ThrowIfDisposed();
@@ -223,13 +270,13 @@ namespace Requester
         private async Task<HttpTextResponse> DoSendForTextResponseAsync(HttpRequest request)
         {
             using (var requestMessage = CreateHttpRequestMessage(request))
-                return await CreateHttpTextResponseAsync(requestMessage).ForAwait();
+                return await CreateHttpTextResponseAsync(requestMessage);
         }
 
         private async Task<HttpEntityResponse<TEntity>> DoSendForEntityResponseAsync<TEntity>(HttpRequest request) where TEntity : class
         {
             using (var requestMessage = CreateHttpRequestMessage(request))
-                return await CreateHttpEntityResponseAsync<TEntity>(requestMessage).ForAwait();
+                return await CreateHttpEntityResponseAsync<TEntity>(requestMessage);
         }
 
         protected virtual HttpRequestMessage CreateHttpRequestMessage(HttpRequest request)
@@ -288,9 +335,9 @@ namespace Requester
                     if (message.Content.Headers.ContentType != null)
                         response.ContentType = message.Content.Headers.ContentType.MediaType;
 
-                    response.Content = await contentFn(message.Content).ForAwait(); //await message.Content.ReadAsStringAsync().ForAwait();
-                    //if (response.Content == string.Empty)
-                    //    response.Content = null;
+                    response.Content = await contentFn(message.Content).ForAwait();
+                    if ((response.Content as string) == string.Empty)
+                        response.Content = null;
                 }
             }
 

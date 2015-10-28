@@ -57,7 +57,7 @@
     <Compile Include="Extensions\HttpExtensions.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Extensions\UriExtensions.cs" />
-    <Compile Include="Http\HttpHeaders.cs" />
+    <Compile Include="Http\HttpRequesterHeaders.cs" />
     <Compile Include="HttpResponse.cs" />
     <Compile Include="IHttpRequester.cs" />
     <Compile Include="Http\JsonContent.cs" />
