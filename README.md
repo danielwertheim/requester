@@ -142,12 +142,12 @@ The `HttpRequester` is what is used but the `When` constructs, and can of course
 		
 	  //Our using simplified overloads...
 	  await requester.PostAsync();
-	  await requester.PostContentAsync(json);
-	  await requester.PostContentAsync(new { _id = "doc2" Name = "Foo" });
+	  await requester.PostJsonAsync(json);
+	  await requester.PostEntityAsync(new { _id = "doc2" Name = "Foo" });
 	  
 	  await requester.PutAsync();
-	  await requester.PutContentAsync(json, "/doc3");
-	  await requester.PutContentAsync(new { Name = "Foo" }, "/doc4");
+	  await requester.PutJsonAsync(json, "/doc3");
+	  await requester.PutEntityAsync(new { Name = "Foo" }, "/doc4");
 	}
 
 ### HttpResponse
