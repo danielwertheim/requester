@@ -270,13 +270,13 @@ namespace Requester
         private async Task<HttpTextResponse> DoSendForTextResponseAsync(HttpRequest request)
         {
             using (var requestMessage = CreateHttpRequestMessage(request))
-                return await CreateHttpTextResponseAsync(requestMessage);
+                return await CreateHttpTextResponseAsync(requestMessage).ForAwait();
         }
 
         private async Task<HttpEntityResponse<TEntity>> DoSendForEntityResponseAsync<TEntity>(HttpRequest request) where TEntity : class
         {
             using (var requestMessage = CreateHttpRequestMessage(request))
-                return await CreateHttpEntityResponseAsync<TEntity>(requestMessage);
+                return await CreateHttpEntityResponseAsync<TEntity>(requestMessage).ForAwait();
         }
 
         protected virtual HttpRequestMessage CreateHttpRequestMessage(HttpRequest request)
