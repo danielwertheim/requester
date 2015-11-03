@@ -126,7 +126,7 @@ namespace Requester
 
         public virtual IHttpRequester WithBasicAuthorization(BasicAuthorizationString value)
         {
-            return WithHeader(HttpRequesterHeaders.Instance.Authorization, value);
+            return WithHeader(HttpRequesterHeaders.Instance.Authorization, "Basic " + value);
         }
 
         public Task<HttpTextResponse> DeleteAsync(string relativeUrl = null)
@@ -301,12 +301,12 @@ namespace Requester
 
         protected virtual Task<HttpTextResponse> CreateHttpTextResponseAsync(HttpRequestMessage request)
         {
-            return CreateHttpContentResponseAsync(request, () => new HttpTextResponse(), async msg => await msg.ReadAsStringAsync());
+            return CreateHttpContentResponseAsync(request, () => new HttpTextResponse(), async msg => await msg.ReadAsStringAsync().ForAwait());
         }
 
         protected virtual Task<HttpEntityResponse<TEntity>> CreateHttpEntityResponseAsync<TEntity>(HttpRequestMessage request) where TEntity : class
         {
-            return CreateHttpContentResponseAsync(request, () => new HttpEntityResponse<TEntity>(), async msg => JsonSerializer.Deserialize<TEntity>(await msg.ReadAsStringAsync()));
+            return CreateHttpContentResponseAsync(request, () => new HttpEntityResponse<TEntity>(), async msg => JsonSerializer.Deserialize<TEntity>(await msg.ReadAsStringAsync().ForAwait()));
         }
 
         protected virtual async Task<TResponse> CreateHttpContentResponseAsync<TResponse, TContent>(HttpRequestMessage request, Func<TResponse> responseFn, Func<HttpContent, Task<TContent>> contentFn) where TResponse : HttpContentResponse<TContent> where TContent : class

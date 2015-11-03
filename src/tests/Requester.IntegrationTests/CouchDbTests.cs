@@ -9,12 +9,15 @@ namespace Requester.IntegrationTests
 {
     public class CouchDbTests : IDisposable
     {
-        private const string DbUrl = "http://developer:1q2w3e4r@development:5984/mydb/";
+        private const string U = "dev";
+        private const string P = "1q2w3e4r";
+        private const string DbUrl = "http://development:5984/mydb/";
+        private static readonly string DbUrlWithCredentials = $"http://{U}:{P}@development:5984/mydb/";
         private readonly HttpRequester _dbRequester;
 
         public CouchDbTests()
         {
-            _dbRequester = new HttpRequester(DbUrl);
+            _dbRequester = new HttpRequester(DbUrlWithCredentials);
             var head = _dbRequester.HeadAsync().Result;
             if(head.IsSuccess)
                 _dbRequester.DeleteAsync().Wait();
@@ -27,25 +30,25 @@ namespace Requester.IntegrationTests
         }
 
         [Fact]
-        public void Can_eat_candy_like_a_monster()
+        public void Can_use_the_When_construct()
         {
-            When.Put(DbUrl)
+            When.Put(DbUrlWithCredentials)
                 .TheResponse(should => should.BeSuccessful());
 
-            When.Head(DbUrl)
+            When.Head(DbUrlWithCredentials)
                 .TheResponse(should => should.BeSuccessful());
 
-            When.PostOfJson(DbUrl, "{\"_id\":\"doc1\", \"name\": \"Daniel Wertheim\", \"address\":{\"street\":\"One way\", \"zip\":12345}, \"hobbies\":[\"programming\",\"running\"]}")
+            When.PostOfJson(DbUrlWithCredentials, "{\"_id\":\"doc1\", \"name\": \"Daniel Wertheim\", \"address\":{\"street\":\"One way\", \"zip\":12345}, \"hobbies\":[\"programming\",\"running\"]}")
                 .TheResponse(should => should
                     .BeSuccessful()
                     .HaveStatus(HttpStatusCode.Created));
 
-            When.PutOfJson(DbUrl + "doc2", "{\"name\": \"John Doe\", \"address\":{\"street\":\"Two way\", \"zip\":54321}, \"hobbies\":[\"programming\",\"running\"]}")
+            When.PutOfJson(DbUrlWithCredentials + "doc2", "{\"name\": \"John Doe\", \"address\":{\"street\":\"Two way\", \"zip\":54321}, \"hobbies\":[\"programming\",\"running\"]}")
                 .TheResponse(should => should
                     .BeSuccessful()
                     .HaveStatus(HttpStatusCode.Created));
 
-            When.GetOfJson(DbUrl + "doc1")
+            When.GetOfJson(DbUrlWithCredentials + "doc1")
                 .TheResponse(should => should
                     .BeSuccessful()
                     .BeJsonResponse()
@@ -58,7 +61,7 @@ namespace Requester.IntegrationTests
                     }")
                     .Match(new { _id = "doc1", name = "Daniel Wertheim" }));
 
-            When.GetOfJson(DbUrl + "doc2")
+            When.GetOfJson(DbUrlWithCredentials + "doc2")
                 .TheResponse(should => should
                     .BeSuccessful()
                     .BeJsonResponse()
@@ -66,13 +69,13 @@ namespace Requester.IntegrationTests
                     .HaveSpecificValue("hobbies[0]", "programming")
                     .HaveSpecificValue("address.zip", 54321));
 
-            var doc1 = When.Head(DbUrl + "doc1").TheResponse(should => should.BeSuccessful());
+            var doc1 = When.Head(DbUrlWithCredentials + "doc1").TheResponse(should => should.BeSuccessful());
 
-            When.Delete(DbUrl + "doc1?rev=" + doc1.ETag).TheResponse(should => should.BeSuccessful());
+            When.Delete(DbUrlWithCredentials + "doc1?rev=" + doc1.ETag).TheResponse(should => should.BeSuccessful());
         }
 
         [Fact]
-        public void Can_drink_soda_like_a_foo()
+        public void Can_use_the_HttpRequester()
         {
             var putDbResponse = _dbRequester.PutAsync().Result;
             putDbResponse
@@ -190,6 +193,19 @@ namespace Requester.IntegrationTests
 
             var deleteDoc1Response = _dbRequester.DeleteAsync($"/doc1?rev={headDoc1Response.ETag}").Result;
             deleteDoc1Response.TheResponse(should => should.BeSuccessful());
+        }
+
+        [Fact]
+        public async void Can_use_basic_auth_on_HttpRequester()
+        {
+            using (var requester = new HttpRequester(DbUrl).WithBasicAuthorization(U,P))
+            {
+                var db = await requester.PutAsync();
+                db.TheResponse(should => should.BeSuccessful());
+
+                var newDoc = await requester.PostJsonAsync("{\"value\":\"can_use_basic_auth_on_HttpRequester\"}");
+                newDoc.TheResponse(should => should.BeSuccessful());
+            }
         }
 
         private class Person

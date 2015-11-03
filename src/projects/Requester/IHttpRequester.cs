@@ -4,12 +4,12 @@ using Requester.Http;
 
 namespace Requester
 {
-    public interface IHttpRequester
+    public interface IHttpRequester : IDisposable
     {
         Uri BaseAddress { get; }
         IJsonSerializer JsonSerializer { get; set; }
         TimeSpan Timeout { get; }
-        void Dispose();
+
         IHttpRequester WithAccept(Func<HttpContentTypes, string> picker);
         IHttpRequester WithAccept(string value);
         IHttpRequester WithIfMatch(string value);
