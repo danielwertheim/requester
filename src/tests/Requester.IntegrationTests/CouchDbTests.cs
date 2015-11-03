@@ -205,6 +205,27 @@ namespace Requester.IntegrationTests
 
                 var newDoc = await requester.PostJsonAsync("{\"value\":\"can_use_basic_auth_on_HttpRequester\"}");
                 newDoc.TheResponse(should => should.BeSuccessful());
+
+                var deleteDoc = await requester.DeleteAsync(newDoc.Location.Replace(requester.BaseAddress.ToString(), string.Empty) + "?rev=" + newDoc.ETag);
+                deleteDoc.TheResponse(should => should.BeSuccessful());
+            }
+        }
+
+        [Fact]
+        public async void Can_have_resulting_entity_with_Post_HttpRequester()
+        {
+            using (var requester = new HttpRequester(DbUrl).WithBasicAuthorization(U, P))
+            {
+                var db = await requester.PutAsync();
+                db.TheResponse(should => should.BeSuccessful());
+
+                var newDoc = await requester.PostJsonAsync<dynamic>("{\"value\":\"one\"}");
+                newDoc.TheResponse(should => should.BeSuccessful());
+
+                string id = newDoc.Content.id;
+
+                var putDoc = await requester.PutJsonAsync<dynamic>("{\"value\":\"two\"}", $"{id}?rev={newDoc.ETag}");
+                putDoc.TheResponse(should => should.BeSuccessful());
             }
         }
 
