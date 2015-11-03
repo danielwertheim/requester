@@ -10,13 +10,22 @@ namespace Requester.Extensions
         {
             IEnumerable<string> values;
             if (!headers.TryGetValues("ETag", out values))
-                return string.Empty;
+                return null;
 
             var eTag = values.FirstOrDefault();
 
             return !string.IsNullOrWhiteSpace(eTag)
                 ? eTag.TrimStart('"').TrimEnd('"')
-                : string.Empty;
+                : null;
+        }
+
+        public static string GetLocation(this HttpResponseHeaders headers)
+        {
+            IEnumerable<string> values;
+
+            return !headers.TryGetValues("Location", out values)
+                ? null
+                : values.FirstOrDefault();
         }
     }
 }
