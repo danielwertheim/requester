@@ -3,6 +3,9 @@
 # Requester
 Requester is a Http-request fiddling magical something that is designed to help me, and maybe you as well, to validate APIs. It's mainly focused on APIs that work with JSON. It was put together after some fiddling with an awesome NodeJS peer: [FrisbyJS](http://frisbyjs.com/ "FrisbyJS").
 
+## About the version
+Until `v1.0.0` the API should be seen as non stable and might target to change.
+
 ## Disclaimer, Remarks...
 This is still an early release hence stuff WILL change. Especially additions for URL-building and helpers for doing requests that should not be validated.
 

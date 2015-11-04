@@ -19,14 +19,12 @@ namespace Requester
         public IJsonSerializer JsonSerializer { get; set; }
         public TimeSpan Timeout => HttpClient.Timeout;
 
-        public HttpRequester(Uri uri, HttpMessageHandler handler = null) : this(uri.ToString(), handler) {}
+        public HttpRequester(string url, HttpMessageHandler handler = null) : this(new Uri(url), handler) { }
 
-        public HttpRequester(string url, HttpMessageHandler handler = null)
+        public HttpRequester(Uri uri = null, HttpMessageHandler handler = null)
         {
-            Ensure.That(url, "url").IsNotNullOrWhiteSpace();
-
             JsonSerializer = new DefaultJsonSerializer();
-            HttpClient = CreateHttpClient(url, handler);
+            HttpClient = CreateHttpClient(uri, handler);
         }
 
         public void Dispose()
@@ -55,21 +53,21 @@ namespace Requester
                 throw new ObjectDisposedException(GetType().Name);
         }
 
-        protected HttpClient CreateHttpClient(string url, HttpMessageHandler handler = null)
+        protected HttpClient CreateHttpClient(Uri uri = null, HttpMessageHandler handler = null)
         {
-            var tmpUri = new Uri(url);
-
             handler = handler ?? CreateDefaultHandler();
 
-            var client = new HttpClient(handler, true)
-            {
-                BaseAddress = new Uri(tmpUri.GetAbsoluteAddressExceptUserInfo().TrimEnd('/'))
-            };
+            var client = new HttpClient(handler, true);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(HttpContentTypes.Instance.ApplicationJson));
 
-            var basicAuthString = tmpUri.GetBasicAuthString();
-            if (basicAuthString != null)
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicAuthString.Value);
+            if (uri != null)
+            {
+                client.BaseAddress = new Uri(uri.GetAbsoluteAddressExceptUserInfo().TrimEnd('/'));
+
+                var basicAuthString = uri.GetBasicAuthString();
+                if (basicAuthString != null)
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicAuthString.Value);
+            }
 
             return client;
         }
@@ -82,49 +80,49 @@ namespace Requester
             };
         }
 
-        public virtual IHttpRequester WithAccept(Func<HttpContentTypes, string> picker)
+        public IHttpRequester WithAccept(Func<HttpContentTypes, string> picker)
         {
             return WithAccept(picker(HttpContentTypes.Instance));
         }
 
-        public virtual IHttpRequester WithAccept(string value)
+        public IHttpRequester WithAccept(string value)
         {
             return WithHeader(HttpRequesterHeaders.Instance.Accept, value);
         }
 
-        public virtual IHttpRequester WithIfMatch(string value)
+        public IHttpRequester WithIfMatch(string value)
         {
             return WithHeader(HttpRequesterHeaders.Instance.IfMatch, value);
         }
 
-        public virtual IHttpRequester WithHeader(Func<HttpRequesterHeaders, string> picker, string value)
+        public IHttpRequester WithHeader(Func<HttpRequesterHeaders, string> picker, string value)
         {
             return WithHeader(picker(HttpRequesterHeaders.Instance), value);
         }
 
-        public virtual IHttpRequester WithHeader(string name, string value)
+        public IHttpRequester WithHeader(string name, string value)
         {
             HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(name, value);
 
             return this;
         }
 
-        public virtual IHttpRequester WithAuthorization(string value)
+        public IHttpRequester WithAuthorization(string value)
         {
             return WithHeader(HttpRequesterHeaders.Instance.Authorization, value);
         }
 
-        public virtual IHttpRequester WithBearer(string value)
+        public IHttpRequester WithBearer(string value)
         {
             return WithHeader(HttpRequesterHeaders.Instance.Authorization, "Bearer " + value);
         }
 
-        public virtual IHttpRequester WithBasicAuthorization(string username, string password)
+        public IHttpRequester WithBasicAuthorization(string username, string password)
         {
             return WithBasicAuthorization(new BasicAuthorizationString(username, password));
         }
 
-        public virtual IHttpRequester WithBasicAuthorization(BasicAuthorizationString value)
+        public IHttpRequester WithBasicAuthorization(BasicAuthorizationString value)
         {
             return WithHeader(HttpRequesterHeaders.Instance.Authorization, "Basic " + value);
         }

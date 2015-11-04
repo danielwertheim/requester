@@ -8,15 +8,29 @@ namespace Requester.TestWebApi.Storage
     {
         private readonly ConcurrentDictionary<Guid, Person> _personState = new ConcurrentDictionary<Guid, Person>();
 
-        public void Store(Person person)
+        public StoreResult Store(Person person)
         {
-            _personState.AddOrUpdate(person.Id, person, (eid, ep) => person);
+            var m = StoreResult.Added;
+
+            _personState.AddOrUpdate(person.Id, person, (eid, ep) =>
+            {
+                m = StoreResult.Updated;
+                return person;
+            });
+
+            return m;
         }
 
         public Person Get(Guid id)
         {
             Person r;
             return _personState.TryGetValue(id, out r) ? r : null;
+        }
+
+        public bool Delete(Guid id)
+        {
+            Person r;
+            return _personState.TryRemove(id, out r);
         }
     }
 }

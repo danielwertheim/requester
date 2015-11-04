@@ -65,9 +65,9 @@ namespace Requester.IntegrationTests
                 .TheResponse(should => should
                     .BeSuccessful()
                     .BeJsonResponse()
-                    .HaveSpecificValue("_id", "doc2")
-                    .HaveSpecificValue("hobbies[0]", "programming")
-                    .HaveSpecificValue("address.zip", 54321));
+                    .HaveSpecificValueFor("_id", "doc2")
+                    .HaveSpecificValueFor("hobbies[0]", "programming")
+                    .HaveSpecificValueFor("address.zip", 54321));
 
             var doc1 = When.Head(DbUrlWithCredentials + "doc1").TheResponse(should => should.BeSuccessful());
 
@@ -169,18 +169,18 @@ namespace Requester.IntegrationTests
                 .TheResponse(should => should
                     .BeSuccessful()
                     .BeJsonResponse()
-                    .HaveSpecificValue("_id", "doc2")
-                    .HaveSpecificValue("hobbies[0]", "programming")
-                    .HaveSpecificValue("address.zip", 54321));
+                    .HaveSpecificValueFor("_id", "doc2")
+                    .HaveSpecificValueFor("hobbies[0]", "programming")
+                    .HaveSpecificValueFor("address.zip", 54321));
 
             var getEnt2Response = _dbRequester.GetAsync("/ent2").Result;
             getEnt2Response
                 .TheResponse(should => should
                     .BeSuccessful()
                     .BeJsonResponse()
-                    .HaveSpecificValue("_id", "ent2")
-                    .HaveSpecificValue("hobbies[0]", "programming")
-                    .HaveSpecificValue("address.zip", 54321));
+                    .HaveSpecificValueFor("_id", "ent2")
+                    .HaveSpecificValueFor("hobbies[0]", "programming")
+                    .HaveSpecificValueFor("address.zip", 54321));
 
             var getEnt1AsEntityResponse = _dbRequester.GetAsync<Person>("/ent1").Result;
             getEnt1AsEntityResponse.IsSuccess.Should().BeTrue();

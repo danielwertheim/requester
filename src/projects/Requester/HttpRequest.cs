@@ -80,6 +80,14 @@ namespace Requester
             return WithHeader(HttpRequesterHeaders.Instance.Authorization, value);
         }
 
+        public virtual HttpRequest WithContent<T>(T content) where T : HttpContent
+        {
+            if (content != null)
+                Content = content;
+
+            return this;
+        }
+
         public virtual HttpRequest WithContent(byte[] content, Func<HttpContentTypes, string> picker)
         {
             return WithContent(content, picker(HttpContentTypes.Instance));
