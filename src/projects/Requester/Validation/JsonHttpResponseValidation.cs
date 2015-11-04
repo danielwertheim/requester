@@ -51,6 +51,18 @@ namespace Requester.Validation
             return this;
         }
 
+        public JsonHttpResponseValidation NotHavingSpecificValueFor<T>(string path, T unExpectedValue)
+        {
+            var node = JToken.Parse(Response.Content).SelectToken(path, false);
+            if (node == null)
+                throw AssertionExceptionFactory.CreateForResponse(Response, "Expected sent path '{0}' to map to a node in the JSON document, but it did not.", path);
+
+            if (node.ValueIsEqualTo(unExpectedValue))
+                throw AssertionExceptionFactory.CreateForResponse(Response, "Expected sent path '{0}' to NOT return '{1}', but it sure got '{2}'.", path, unExpectedValue, node.Value<T>());
+
+            return this;
+        }
+
         public JsonHttpResponseValidation HaveJsonConformingToSchema(string properties)
         {
             if (!properties.StartsWith("{"))
