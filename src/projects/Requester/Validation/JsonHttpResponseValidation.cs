@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
+using Requester.Extensions;
 
 namespace Requester.Validation
 {
@@ -38,13 +39,13 @@ namespace Requester.Validation
             return this;
         }
 
-        public JsonHttpResponseValidation HaveSpecificValue<T>(string path, T expectedValue)
+        public JsonHttpResponseValidation HaveSpecificValueFor<T>(string path, T expectedValue)
         {
             var node = JToken.Parse(Response.Content).SelectToken(path, false);
             if (node == null)
                 throw AssertionExceptionFactory.CreateForResponse(Response, "Expected sent path '{0}' to map to a node in the JSON document, but it did not.", path);
 
-            if(!Equals(node.Value<T>(), expectedValue))
+            if(!node.ValueIsEqualTo(expectedValue))
                 throw AssertionExceptionFactory.CreateForResponse(Response, "Expected sent path '{0}' to return '{1}', but got '{2}'.", path, expectedValue, node.Value<T>());
 
             return this;

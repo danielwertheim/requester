@@ -67,6 +67,7 @@
     <Compile Include="Validation\AssertionExceptionFactory.cs" />
     <Compile Include="Validation\HttpResponseValidation.cs" />
     <Compile Include="Validation\JsonHttpResponseValidation.cs" />
+    <Compile Include="Extensions\JTokenExtensions.cs" />
     <Compile Include="Validation\RequesterAssertionException.cs" />
     <Compile Include="Validation\Should.cs" />
     <Compile Include="Validation\TypeExtensions.cs" />

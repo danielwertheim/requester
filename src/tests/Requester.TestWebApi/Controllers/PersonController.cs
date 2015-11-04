@@ -28,13 +28,29 @@ namespace Requester.TestWebApi.Controllers
             return Request.CreateResponse(HttpStatusCode.NotFound);
         }
 
+        [HttpPost]
+        [Route]
+        public HttpResponseMessage Post(Person person)
+        {
+            person.Id = Guid.NewGuid();
+
+            _personsStore.Store(person);
+
+            return Request.CreateResponse(HttpStatusCode.Created, person);
+        }
+
         [HttpPut]
         [Route]
         public HttpResponseMessage Put(Person person)
         {
-            _personsStore.Store(person);
+            return Request.CreateResponse(_personsStore.Store(person) == StoreResult.Added ? HttpStatusCode.Created : HttpStatusCode.OK, person);
+        }
 
-            return Request.CreateResponse(HttpStatusCode.Created);
+        [HttpDelete]
+        [Route("{id}")]
+        public HttpResponseMessage Delete(Guid id)
+        {
+            return Request.CreateResponse(_personsStore.Delete(id) ? HttpStatusCode.OK : HttpStatusCode.NotFound);
         }
     }
 }

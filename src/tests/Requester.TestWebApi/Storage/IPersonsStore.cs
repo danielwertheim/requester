@@ -5,7 +5,8 @@ namespace Requester.TestWebApi.Storage
 {
     public interface IPersonsStore
     {
-        void Store(Person person);
+        StoreResult Store(Person person);
         Person Get(Guid id);
+        bool Delete(Guid id);
     }
 }
