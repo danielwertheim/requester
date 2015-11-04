@@ -66,7 +66,7 @@ namespace Requester
 
                 var basicAuthString = uri.GetBasicAuthString();
                 if (basicAuthString != null)
-                    WithBasicAuthorization(basicAuthString);
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicAuthString.Value);
             }
 
             return client;
