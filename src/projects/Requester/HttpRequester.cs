@@ -82,49 +82,49 @@ namespace Requester
             };
         }
 
-        public virtual IHttpRequester WithAccept(Func<HttpContentTypes, string> picker)
+        public IHttpRequester WithAccept(Func<HttpContentTypes, string> picker)
         {
             return WithAccept(picker(HttpContentTypes.Instance));
         }
 
-        public virtual IHttpRequester WithAccept(string value)
+        public IHttpRequester WithAccept(string value)
         {
             return WithHeader(HttpRequesterHeaders.Instance.Accept, value);
         }
 
-        public virtual IHttpRequester WithIfMatch(string value)
+        public IHttpRequester WithIfMatch(string value)
         {
             return WithHeader(HttpRequesterHeaders.Instance.IfMatch, value);
         }
 
-        public virtual IHttpRequester WithHeader(Func<HttpRequesterHeaders, string> picker, string value)
+        public IHttpRequester WithHeader(Func<HttpRequesterHeaders, string> picker, string value)
         {
             return WithHeader(picker(HttpRequesterHeaders.Instance), value);
         }
 
-        public virtual IHttpRequester WithHeader(string name, string value)
+        public IHttpRequester WithHeader(string name, string value)
         {
             HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(name, value);
 
             return this;
         }
 
-        public virtual IHttpRequester WithAuthorization(string value)
+        public IHttpRequester WithAuthorization(string value)
         {
             return WithHeader(HttpRequesterHeaders.Instance.Authorization, value);
         }
 
-        public virtual IHttpRequester WithBearer(string value)
+        public IHttpRequester WithBearer(string value)
         {
             return WithHeader(HttpRequesterHeaders.Instance.Authorization, "Bearer " + value);
         }
 
-        public virtual IHttpRequester WithBasicAuthorization(string username, string password)
+        public IHttpRequester WithBasicAuthorization(string username, string password)
         {
             return WithBasicAuthorization(new BasicAuthorizationString(username, password));
         }
 
-        public virtual IHttpRequester WithBasicAuthorization(BasicAuthorizationString value)
+        public IHttpRequester WithBasicAuthorization(BasicAuthorizationString value)
         {
             return WithHeader(HttpRequesterHeaders.Instance.Authorization, "Basic " + value);
         }
