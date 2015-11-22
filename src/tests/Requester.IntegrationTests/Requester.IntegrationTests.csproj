@@ -110,9 +110,9 @@
       <Project>{2c5a9bd7-7698-440a-8001-9463d3aed95a}</Project>
       <Name>Requester</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Requester.TestWebApi\Requester.TestWebApi.csproj">
+    <ProjectReference Include="..\Requester.FakeWebApi\Requester.FakeWebApi.csproj">
       <Project>{0eabe328-f0ca-41b3-b05b-4a4ef006dc45}</Project>
-      <Name>Requester.TestWebApi</Name>
+      <Name>Requester.FakeWebApi</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

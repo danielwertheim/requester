@@ -1,4 +1,4 @@
-namespace Requester.TestWebApi.Storage
+namespace Requester.FakeWebApi.Storage
 {
     public enum StoreResult
     {

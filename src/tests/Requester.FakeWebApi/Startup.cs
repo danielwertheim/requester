@@ -7,9 +7,9 @@ using Ninject.Modules;
 using Ninject.Web.Common.OwinHost;
 using Ninject.Web.WebApi.OwinHost;
 using Owin;
-using Requester.TestWebApi.Storage;
+using Requester.FakeWebApi.Storage;
 
-namespace Requester.TestWebApi
+namespace Requester.FakeWebApi
 {
     public class Startup
     {

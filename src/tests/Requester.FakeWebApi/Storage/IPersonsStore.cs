@@ -1,7 +1,7 @@
 ﻿using System;
-using Requester.TestWebApi.Model;
+using Requester.FakeWebApi.Model;
 
-namespace Requester.TestWebApi.Storage
+namespace Requester.FakeWebApi.Storage
 {
     public interface IPersonsStore
     {

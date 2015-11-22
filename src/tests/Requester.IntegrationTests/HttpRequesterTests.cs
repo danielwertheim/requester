@@ -4,8 +4,8 @@ using System.Net;
 using System.Net.Http;
 using FluentAssertions;
 using Microsoft.Owin.Testing;
-using Requester.TestWebApi;
-using Requester.TestWebApi.Model;
+using Requester.FakeWebApi;
+using Requester.FakeWebApi.Model;
 using Requester.Validation;
 using Xunit;
 

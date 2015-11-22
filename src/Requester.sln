@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Requester.IntegrationTests", "tests\Requester.IntegrationTests\Requester.IntegrationTests.csproj", "{A8B59980-68BC-4C88-803B-9A913B0C6626}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Requester.TestWebApi", "tests\Requester.TestWebApi\Requester.TestWebApi.csproj", "{0EABE328-F0CA-41B3-B05B-4A4EF006DC45}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Requester.FakeWebApi", "tests\Requester.FakeWebApi\Requester.FakeWebApi.csproj", "{0EABE328-F0CA-41B3-B05B-4A4EF006DC45}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{1FA6FF47-5650-4138-982B-EF6BB784A326}"
 EndProject

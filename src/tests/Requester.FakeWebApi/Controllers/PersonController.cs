@@ -2,10 +2,10 @@
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Requester.TestWebApi.Model;
-using Requester.TestWebApi.Storage;
+using Requester.FakeWebApi.Model;
+using Requester.FakeWebApi.Storage;
 
-namespace Requester.TestWebApi.Controllers
+namespace Requester.FakeWebApi.Controllers
 {
     [RoutePrefix("api/persons")]
     public class PersonController : ApiController

@@ -1,6 +1,6 @@
 using System;
 
-namespace Requester.TestWebApi.Model
+namespace Requester.FakeWebApi.Model
 {
     public class Person
     {
