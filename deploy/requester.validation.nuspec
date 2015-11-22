@@ -24,6 +24,6 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="Requester.Validation.dll" target="lib\net45\Requester.Validation.dll"/>
+        <file src="Requester.Validation\Requester.Validation.dll" target="lib\net45\Requester.Validation.dll"/>
     </files>
 </package>
