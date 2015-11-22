@@ -31,8 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EnsureThat.vDinasour, Version=3.2.0.39289, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Ensure.That.3.2.0\lib\net45\EnsureThat.vDinasour.dll</HintPath>
+    <Reference Include="EnsureThat.vDinasour, Version=3.3.0.13, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Ensure.That.3.3.0\lib\net45\EnsureThat.vDinasour.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
