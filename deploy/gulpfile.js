@@ -18,7 +18,7 @@ var ver = '1.0.0',
             version: ver,
             semver: ver + '-rc1',
             revision: argv && argv.buildrevision ? argv.buildrevision : '0',
-            profile: argv.buildprofile || 'Release'
+            profile: argv && argv.buildprofile ? argv.buildprofile : 'Release'
         }
     };
 
