@@ -106,6 +106,10 @@
     <Compile Include="WhenTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\projects\Requester.Validation\Requester.Validation.csproj">
+      <Project>{1c5e5faa-e7b1-4b7b-9696-b0799fb0b3f7}</Project>
+      <Name>Requester.Validation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\projects\Requester\Requester.csproj">
       <Project>{2c5a9bd7-7698-440a-8001-9463d3aed95a}</Project>
       <Name>Requester</Name>

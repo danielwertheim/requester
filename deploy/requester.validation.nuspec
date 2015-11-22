@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package>
     <metadata>
-        <id>Requester</id>
-        <title>Requester - for Web API interactions</title>
+        <id>Requester.Validation</id>
+        <title>Requester - for Web API validation</title>
         <version>$version$</version>
         <authors>danielwertheim</authors>
         <copyright>©Daniel Wertheim</copyright>
-        <summary>For simple async interaction of HTTP web APIs.</summary>
-        <description>Assists with making HTTP-requests against web APIs and to consume the responses of them.</description>
+        <summary>For validation of HTTP web API JSON responses.</summary>
+        <description>Assists with validating responses from web APIs. E.g. by validation of JSON-schema etc.</description>
         <projectUrl>https://github.com/danielwertheim/requester</projectUrl>
         <licenseUrl>https://raw.githubusercontent.com/danielwertheim/requester/master/LICENSE.txt</licenseUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <tags>http web api json</tags>
+        <tags>http web api json response validation</tags>
         <frameworkAssemblies>
           <frameworkAssembly assemblyName="System.Net.Http" targetFramework="net45" />
         </frameworkAssemblies>
         <dependencies>
            <group targetFramework="net452">
+             <dependency id="Requester" version="$version$" />
              <dependency id="Ensure.That" version="3.2.0" />
              <dependency id="Newtonsoft.Json" version="7.0.1" />
            </group>
         </dependencies>
     </metadata>
     <files>
-        <file src="Requester.dll" target="lib\net45\Requester.dll"/>
+        <file src="Requester.Validation.dll" target="lib\net45\Requester.Validation.dll"/>
     </files>
 </package>
