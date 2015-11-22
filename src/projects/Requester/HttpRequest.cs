@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using Requester.Http;
 
 namespace Requester
@@ -9,28 +10,19 @@ namespace Requester
     public class HttpRequest
     {
         public HttpMethod Method { get; private set; }
-        public string RelativeUrl { get; private set; }
+        public string RelativeUrl { get; protected set; }
+
         public IDictionary<string, string> Headers { get; }
         public HttpContent Content { get; private set; }
 
         public HttpRequest(HttpMethod method, string relativeUrl = null)
         {
-            RelativeUrl = FixRelativeUrl(relativeUrl);
+            RelativeUrl = relativeUrl;
             Method = method;
             Headers = new Dictionary<string, string>
             {
                 { HttpRequesterHeaders.Instance.Accept, HttpContentTypes.Instance.ApplicationJson }
             };
-        }
-
-        private string FixRelativeUrl(string relativeUrl = null)
-        {
-            if (relativeUrl == null)
-                return "/";
-
-            return relativeUrl.StartsWith("/")
-                ? relativeUrl
-                : $"/{relativeUrl}";
         }
 
         public virtual HttpRequest WithAccept(Func<HttpContentTypes, string> picker)
@@ -88,6 +80,19 @@ namespace Requester
             return this;
         }
 
+        public virtual HttpRequest WithContent(string content, Func<HttpContentTypes, string> picker)
+        {
+            return WithContent(content, picker(HttpContentTypes.Instance));
+        }
+
+        public virtual HttpRequest WithContent(string content, string contentType)
+        {
+            if(!string.IsNullOrWhiteSpace(content))
+                Content = new BytesContent(Encoding.UTF8.GetBytes(content), contentType);
+
+            return this;
+        }
+
         public virtual HttpRequest WithContent(byte[] content, Func<HttpContentTypes, string> picker)
         {
             return WithContent(content, picker(HttpContentTypes.Instance));
@@ -112,13 +117,10 @@ namespace Requester
 
         public virtual HttpRequest WithRelativeUrl(string url, params object[] fmtArgs)
         {
-            if (!url.StartsWith("/"))
-                url = "/" + url;
+            if (fmtArgs != null && !fmtArgs.Any())
+                url = string.Format(url, fmtArgs);
 
-            if (fmtArgs == null || !fmtArgs.Any())
-                RelativeUrl = url;
-            else
-                RelativeUrl = string.Format(url, fmtArgs);
+            RelativeUrl = url;
 
             return this;
         }
