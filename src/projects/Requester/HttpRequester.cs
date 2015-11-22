@@ -127,6 +127,20 @@ namespace Requester
             return WithHeader(HttpRequesterHeaders.Instance.Authorization, "Basic " + value);
         }
 
+        public Task<HttpTextResponse> SendAsync(HttpRequest request)
+        {
+            ThrowIfDisposed();
+
+            return DoSendForTextResponseAsync(request);
+        }
+
+        public Task<HttpEntityResponse<TEntity>> SendAsync<TEntity>(HttpRequest request) where TEntity : class
+        {
+            ThrowIfDisposed();
+
+            return DoSendForEntityResponseAsync<TEntity>(request);
+        }
+
         public Task<HttpTextResponse> DeleteAsync(string relativeUrl = null)
         {
             ThrowIfDisposed();
@@ -293,20 +307,6 @@ namespace Requester
                 .WithJsonContent(JsonSerializer.Serialize(entity));
 
             return DoSendForEntityResponseAsync<TEntityOut>(request);
-        }
-
-        public Task<HttpTextResponse> SendAsync(HttpRequest request)
-        {
-            ThrowIfDisposed();
-
-            return DoSendForTextResponseAsync(request);
-        }
-
-        public Task<HttpEntityResponse<TEntity>> SendAsync<TEntity>(HttpRequest request) where TEntity : class
-        {
-            ThrowIfDisposed();
-
-            return DoSendForEntityResponseAsync<TEntity>(request);
         }
 
         private async Task<HttpTextResponse> DoSendForTextResponseAsync(HttpRequest request)
