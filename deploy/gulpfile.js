@@ -69,11 +69,13 @@ gulp.task('build', function() {
 });
 
 gulp.task('copy', function() {
-    var tasks = config.projects.map(function (folder) {
-        return gulp.src(config.src + 'projects/' + folder + '/bin/' + config.build.profile + '/*.{dll,XML}')
+    var tasks = config.projects.map(function (name) {
+        return gulp.src(config.src + 'projects/' + name + '/bin/' + config.build.profile + '/*.{dll,XML}')
             .pipe(flatten())
-            .pipe(gulp.dest(config.build.outdir + '/' + folder));
+            .pipe(gulp.dest(config.build.outdir + '/' + name));
     });
+
+    return merge(tasks);
 });
 
 gulp.task('integration-tests', function () {
@@ -85,7 +87,3 @@ gulp.task('nuget-pack', function () {
     return gulp.src('*.nuspec', { read: false })
         .pipe(shell('nuget pack <%= file.path %> -version ' + config.build.semver + ' -basepath ' + config.build.outdir + ' -o ' + config.build.outdir));
 });
-
-gulp.task('nuget-pack2', shell.task([
-    'nuget pack ./' + config.slnname + '.nuspec -version ' + config.build.semver + ' -basepath ' + config.build.outdir + ' -o ' + config.build.outdir]
-));
