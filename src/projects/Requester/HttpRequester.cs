@@ -243,7 +243,7 @@ namespace Requester
             return DoSendForEntityResponseAsync<TEntityOut>(request);
         }
 
-        public Task<HttpTextResponse> PostEntityAsync(object entity, string relativeUrl = null)
+        public Task<HttpTextResponse> PostEntityAsJsonAsync(object entity, string relativeUrl = null)
         {
             ThrowIfDisposed();
 
@@ -255,7 +255,7 @@ namespace Requester
             return DoSendForTextResponseAsync(request);
         }
 
-        public Task<HttpEntityResponse<TEntityOut>> PostEntityAsync<TEntityOut>(object entity, string relativeUrl = null) where TEntityOut : class
+        public Task<HttpEntityResponse<TEntityOut>> PostEntityAsJsonAsync<TEntityOut>(object entity, string relativeUrl = null) where TEntityOut : class
         {
             ThrowIfDisposed();
 
@@ -309,7 +309,7 @@ namespace Requester
             return DoSendForEntityResponseAsync<TEntityOut>(request);
         }
 
-        public Task<HttpTextResponse> PutEntityAsync(object entity, string relativeUrl = null)
+        public Task<HttpTextResponse> PutEntityAsJsonAsync(object entity, string relativeUrl = null)
         {
             ThrowIfDisposed();
 
@@ -321,7 +321,7 @@ namespace Requester
             return DoSendForTextResponseAsync(request);
         }
 
-        public Task<HttpEntityResponse<TEntityOut>> PutEntityAsync<TEntityOut>(object entity, string relativeUrl = null) where TEntityOut : class
+        public Task<HttpEntityResponse<TEntityOut>> PutEntityAsJsonAsync<TEntityOut>(object entity, string relativeUrl = null) where TEntityOut : class
         {
             ThrowIfDisposed();
 

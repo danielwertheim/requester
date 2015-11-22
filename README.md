@@ -7,8 +7,10 @@ Requester is designed to help you interact with, as well as validate, web APIs. 
 
 It was put together after some fiddling with an awesome NodeJS peer: [FrisbyJS](http://frisbyjs.com/ "FrisbyJS"), for validationg web APIs.
 
+Most of the `HttpRequester` has been extracted from `MyCouch` [the async CouchDB client for .Net](https://github.com/danielwertheim/mycouch).
+
 ## NuGet
-It supports .Net4.5+ and there are two packages: one for web API interaction; one for web API validation.
+It supports .Net4.5+ and there are **two packages**: one for *web API interaction*; one for *web API validation*.
 
 ### Requester NuGet
 The [Requester package](https://www.nuget.org/packages/requester), is only for consuming web APIs. For validation features: see [Requester.Validation](https://www.nuget.org/packages/requester.validation)
@@ -18,6 +20,7 @@ using Requester;
 ```
 
 ```csharp
+//Sample of interacting with a CouchDB instance
 using(var requester = new HttpRequester("http://localhost:5984/mydb"))
 {
   //Ensure db is created
@@ -28,13 +31,16 @@ using(var requester = new HttpRequester("http://localhost:5984/mydb"))
     new HttpRequest(HttpMethod.Put, "/mydocid").WithJsonContent(someJson));
 
   //Our using simplified overloads...
-  await requester.PostAsync();
   await requester.PostJsonAsync(json);
-  await requester.PostEntityAsync(new { _id = "doc2" Name = "Foo" });
+  await requester.PostEntityAsJsonAsync(new { _id = "doc2" Name = "Foo" });
 
-  await requester.PutAsync();
   await requester.PutJsonAsync(json, "/doc3");
-  await requester.PutEntityAsync(new { Name = "Foo" }, "/doc4");
+  await requester.PutEntityAsJsonAsync(new { Name = "Foo" }, "/doc4");
+
+  var jsonResponse = await requester.GetAsync("/doc3");
+  var entityResponse = await requester.GetAsync<MyDoc>("/doc3");
+
+  var deleteResponse = await requester.DeleteAsync($"/doc3?rev={jsonResponse.ETag}");
 }
 ```
 
@@ -42,10 +48,10 @@ The response of the `HttpRequester` is a `HttpResponse`.
 
 ```csharp
 //Everything is a response (HEAD, GET, POST, PUT, DELETE)
-var get = await requester.SendAsync(new HttpRequest(HttpMethod.Get, "/mydocid"));
+var response = await requester.SendAsync(new HttpRequest(HttpMethod.Get, "/mydocid"));
 
 //The resonse has like: StatusCode, Reason, Content, ETag, ContentType etc.
-Debug.WriteLine(get.ToStringDebugVersion(includeContent: true));
+Debug.WriteLine(response.ToStringDebugVersion(includeContent: true));
 ```
 
 The output would be:

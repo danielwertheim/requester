@@ -94,7 +94,7 @@ namespace Requester.IntegrationTests
                     .HaveStatus(HttpStatusCode.Created));
 
             var postEntityResponse = _dbRequester
-                .PostEntityAsync(new
+                .PostEntityAsJsonAsync(new
                 {
                     _id = "ent1",
                     Name = "Daniel Wertheim",
@@ -120,7 +120,7 @@ namespace Requester.IntegrationTests
                     .HaveStatus(HttpStatusCode.Created));
 
             var putEntityResponse = _dbRequester
-                .PutEntityAsync(new
+                .PutEntityAsJsonAsync(new
                 {
                     Name = "John Doe",
                     Address = new
