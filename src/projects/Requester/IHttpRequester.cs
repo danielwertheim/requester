@@ -1,24 +1,11 @@
-using System;
 using System.Threading.Tasks;
-using Requester.Http;
 
 namespace Requester
 {
-    public interface IHttpRequester : IDisposable
+    public interface IHttpRequester
     {
-        Uri BaseAddress { get; }
-        IJsonSerializer JsonSerializer { get; set; }
-        TimeSpan Timeout { get; }
-
-        IHttpRequester WithAccept(Func<HttpContentTypes, string> picker);
-        IHttpRequester WithAccept(string value);
-        IHttpRequester WithIfMatch(string value);
-        IHttpRequester WithHeader(Func<HttpRequesterHeaders, string> picker, string value);
-        IHttpRequester WithHeader(string name, string value);
-        IHttpRequester WithAuthorization(string value);
-        IHttpRequester WithBearer(string value);
-        IHttpRequester WithBasicAuthorization(string username, string password);
-        IHttpRequester WithBasicAuthorization(BasicAuthorizationString value);
+        IHttpRequesterConfig Config { get; }
+        IJsonSerializer JsonSerializer { get; }
 
         Task<HttpTextResponse> SendAsync(HttpRequest request);
         Task<HttpEntityResponse<TEntity>> SendAsync<TEntity>(HttpRequest request) where TEntity : class;

@@ -66,6 +66,28 @@ Content:{
     "hobbies":["programming","running"]}
 ```
 
+#### Configuration
+You can configure it e.g. at contruction to via `Configure()` or via `Config`.
+
+```csharp
+//Using Configure function
+using (var requester = new HttpRequester("http://localhost").Configure(cfg => cfg
+    .WithBasicAuthorization("foo", "bar")
+    .WithTimeout(TimeSpan.FromSeconds(30))
+    .WithAccept("text/plain")))
+{
+    var response = await requester.GetAsync();
+};
+```
+
+```csharp
+//Using Config object
+requester.Config
+    .WithBasicAuthorization("foo", "bar")
+    .WithTimeout(TimeSpan.FromSeconds(30))
+    .WithAccept("text/plain");
+```
+
 ### Requester.Validation NuGet
 The [Requester.Validation package](https://www.nuget.org/packages/requester), is used for validation of Web APIs.
 

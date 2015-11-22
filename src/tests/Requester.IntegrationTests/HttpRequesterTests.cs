@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using FluentAssertions;
 using Microsoft.Owin.Testing;
 using Requester.FakeWebApi;
 using Requester.FakeWebApi.Model;

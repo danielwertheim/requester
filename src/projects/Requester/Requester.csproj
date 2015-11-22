@@ -48,6 +48,8 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="IConfigureHttpRequesterOf.cs" />
+    <Compile Include="IHttpRequesterConfig.cs" />
     <Compile Include="Serialization\DebugJsonSerializer.cs" />
     <Compile Include="Serialization\DefaultJsonSerializer.cs" />
     <Compile Include="Serialization\DefaultJsonSerializerSettings.cs" />
