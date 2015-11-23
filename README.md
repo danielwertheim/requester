@@ -1,8 +1,12 @@
+# Requester
+**Requester:**
+
 [![Nuget](https://img.shields.io/nuget/v/requester.svg)](https://www.nuget.org/packages/requester/) [![Users](https://img.shields.io/nuget/dt/requester.svg)](https://www.nuget.org/packages/requester/)
+
+**Requester.Validation:**
 
 [![Nuget](https://img.shields.io/nuget/v/requester.validation.svg)](https://www.nuget.org/packages/requester.validation/) [![Users](https://img.shields.io/nuget/dt/requester.validation.svg)](https://www.nuget.org/packages/requester.validation/)
 
-# Requester
 Requester is designed to help you interact with, as well as validate, web APIs. It's mainly focused on APIs that work with JSON.
 
 It was put together after some fiddling with an awesome NodeJS peer: [FrisbyJS](http://frisbyjs.com/ "FrisbyJS"), for validationg web APIs.
