@@ -10,14 +10,17 @@ using Requester.Serialization;
 
 namespace Requester
 {
-    public class HttpRequester : IHttpRequester
+    public class HttpRequester : IHttpRequester, IHttpRequesterConfig, IDisposable, IConfigureHttpRequesterOf<HttpRequester>
     {
         protected HttpClient HttpClient { get; private set; }
         protected bool IsDisposed { get; private set; }
-        
-        public Uri BaseAddress => HttpClient.BaseAddress;
-        public IJsonSerializer JsonSerializer { get; set; }
-        public TimeSpan Timeout => HttpClient.Timeout;
+
+        Uri IHttpRequesterConfig.BaseAddress => HttpClient.BaseAddress;
+        TimeSpan IHttpRequesterConfig.Timeout => HttpClient.Timeout;
+        HttpRequestHeaders IHttpRequesterConfig.Headers => HttpClient.DefaultRequestHeaders;
+
+        public IHttpRequesterConfig Config => this;
+        public IJsonSerializer JsonSerializer { get; }
 
         public HttpRequester(string url, HttpMessageHandler handler = null) : this(new Uri(url), handler) { }
 
@@ -80,51 +83,86 @@ namespace Requester
             };
         }
 
-        public IHttpRequester WithAccept(Func<HttpContentTypes, string> picker)
+        public HttpRequester Configure(Action<IHttpRequesterConfig> config)
         {
-            return WithAccept(picker(HttpContentTypes.Instance));
+            config(this);
+
+            return this;
         }
 
-        public IHttpRequester WithAccept(string value)
+        IHttpRequesterConfig IHttpRequesterConfig.WithBaseAddress(string value)
         {
-            return WithHeader(HttpRequesterHeaders.Instance.Accept, value);
+            HttpClient.BaseAddress = new Uri(value);
+
+            return this;
         }
 
-        public IHttpRequester WithIfMatch(string value)
+        IHttpRequesterConfig IHttpRequesterConfig.WithTimeout(TimeSpan value)
         {
-            return WithHeader(HttpRequesterHeaders.Instance.IfMatch, value);
+            HttpClient.Timeout = value;
+
+            return this;
         }
 
-        public IHttpRequester WithHeader(Func<HttpRequesterHeaders, string> picker, string value)
+        IHttpRequesterConfig IHttpRequesterConfig.WithAccept(Func<HttpContentTypes, string> picker)
         {
-            return WithHeader(picker(HttpRequesterHeaders.Instance), value);
+            return Config.WithAccept(picker(HttpContentTypes.Instance));
         }
 
-        public IHttpRequester WithHeader(string name, string value)
+        IHttpRequesterConfig IHttpRequesterConfig.WithAccept(string value)
+        {
+            return Config.WithHeader(HttpRequesterHeaders.Instance.Accept, value);
+        }
+
+        IHttpRequesterConfig IHttpRequesterConfig.WithIfMatch(string value)
+        {
+            return Config.WithHeader(HttpRequesterHeaders.Instance.IfMatch, value);
+        }
+
+        IHttpRequesterConfig IHttpRequesterConfig.WithHeader(Func<HttpRequesterHeaders, string> picker, string value)
+        {
+            return Config.WithHeader(picker(HttpRequesterHeaders.Instance), value);
+        }
+
+        IHttpRequesterConfig IHttpRequesterConfig.WithHeader(string name, string value)
         {
             HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(name, value);
 
             return this;
         }
 
-        public IHttpRequester WithAuthorization(string value)
+        IHttpRequesterConfig IHttpRequesterConfig.WithAuthorization(string value)
         {
-            return WithHeader(HttpRequesterHeaders.Instance.Authorization, value);
+            return Config.WithHeader(HttpRequesterHeaders.Instance.Authorization, value);
         }
 
-        public IHttpRequester WithBearer(string value)
+        IHttpRequesterConfig IHttpRequesterConfig.WithBearer(string value)
         {
-            return WithHeader(HttpRequesterHeaders.Instance.Authorization, "Bearer " + value);
+            return Config.WithHeader(HttpRequesterHeaders.Instance.Authorization, "Bearer " + value);
         }
 
-        public IHttpRequester WithBasicAuthorization(string username, string password)
+        IHttpRequesterConfig IHttpRequesterConfig.WithBasicAuthorization(string username, string password)
         {
-            return WithBasicAuthorization(new BasicAuthorizationString(username, password));
+            return Config.WithBasicAuthorization(new BasicAuthorizationString(username, password));
         }
 
-        public IHttpRequester WithBasicAuthorization(BasicAuthorizationString value)
+        IHttpRequesterConfig IHttpRequesterConfig.WithBasicAuthorization(BasicAuthorizationString value)
         {
-            return WithHeader(HttpRequesterHeaders.Instance.Authorization, "Basic " + value);
+            return Config.WithHeader(HttpRequesterHeaders.Instance.Authorization, "Basic " + value);
+        }
+
+        public Task<HttpTextResponse> SendAsync(HttpRequest request)
+        {
+            ThrowIfDisposed();
+
+            return DoSendForTextResponseAsync(request);
+        }
+
+        public Task<HttpEntityResponse<TEntity>> SendAsync<TEntity>(HttpRequest request) where TEntity : class
+        {
+            ThrowIfDisposed();
+
+            return DoSendForEntityResponseAsync<TEntity>(request);
         }
 
         public Task<HttpTextResponse> DeleteAsync(string relativeUrl = null)
@@ -205,7 +243,7 @@ namespace Requester
             return DoSendForEntityResponseAsync<TEntityOut>(request);
         }
 
-        public Task<HttpTextResponse> PostEntityAsync(object entity, string relativeUrl = null)
+        public Task<HttpTextResponse> PostEntityAsJsonAsync(object entity, string relativeUrl = null)
         {
             ThrowIfDisposed();
 
@@ -217,7 +255,7 @@ namespace Requester
             return DoSendForTextResponseAsync(request);
         }
 
-        public Task<HttpEntityResponse<TEntityOut>> PostEntityAsync<TEntityOut>(object entity, string relativeUrl = null) where TEntityOut : class
+        public Task<HttpEntityResponse<TEntityOut>> PostEntityAsJsonAsync<TEntityOut>(object entity, string relativeUrl = null) where TEntityOut : class
         {
             ThrowIfDisposed();
 
@@ -271,7 +309,7 @@ namespace Requester
             return DoSendForEntityResponseAsync<TEntityOut>(request);
         }
 
-        public Task<HttpTextResponse> PutEntityAsync(object entity, string relativeUrl = null)
+        public Task<HttpTextResponse> PutEntityAsJsonAsync(object entity, string relativeUrl = null)
         {
             ThrowIfDisposed();
 
@@ -283,7 +321,7 @@ namespace Requester
             return DoSendForTextResponseAsync(request);
         }
 
-        public Task<HttpEntityResponse<TEntityOut>> PutEntityAsync<TEntityOut>(object entity, string relativeUrl = null) where TEntityOut : class
+        public Task<HttpEntityResponse<TEntityOut>> PutEntityAsJsonAsync<TEntityOut>(object entity, string relativeUrl = null) where TEntityOut : class
         {
             ThrowIfDisposed();
 
@@ -293,20 +331,6 @@ namespace Requester
                 .WithJsonContent(JsonSerializer.Serialize(entity));
 
             return DoSendForEntityResponseAsync<TEntityOut>(request);
-        }
-
-        public Task<HttpTextResponse> SendAsync(HttpRequest request)
-        {
-            ThrowIfDisposed();
-
-            return DoSendForTextResponseAsync(request);
-        }
-
-        public Task<HttpEntityResponse<TEntity>> SendAsync<TEntity>(HttpRequest request) where TEntity : class
-        {
-            ThrowIfDisposed();
-
-            return DoSendForEntityResponseAsync<TEntity>(request);
         }
 
         private async Task<HttpTextResponse> DoSendForTextResponseAsync(HttpRequest request)
@@ -337,8 +361,8 @@ namespace Requester
         protected virtual Uri GenerateRequestUri(string relativeUrl = null)
         {
             return string.IsNullOrWhiteSpace(relativeUrl)
-                ? BaseAddress
-                : new Uri($"{BaseAddress.ToString().TrimEnd('/')}/{relativeUrl.TrimStart('/')}".TrimEnd('/'));
+                ? Config.BaseAddress
+                : new Uri($"{Config.BaseAddress.ToString().TrimEnd('/')}/{relativeUrl.TrimStart('/')}".TrimEnd('/'));
         }
 
         protected virtual Task<HttpTextResponse> CreateHttpTextResponseAsync(HttpRequestMessage request)

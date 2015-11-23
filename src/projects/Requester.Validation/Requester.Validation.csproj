@@ -1,17 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2C5A9BD7-7698-440A-8001-9463D3AED95A}</ProjectGuid>
+    <ProjectGuid>{1C5E5FAA-E7B1-4B7B-9696-B0799FB0B3F7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Requester</RootNamespace>
-    <AssemblyName>Requester</AssemblyName>
+    <RootNamespace>Requester.Validation</RootNamespace>
+    <AssemblyName>Requester.Validation</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,26 +47,21 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="IConfigureHttpRequesterOf.cs" />
-    <Compile Include="IHttpRequesterConfig.cs" />
-    <Compile Include="Serialization\DebugJsonSerializer.cs" />
-    <Compile Include="Serialization\DefaultJsonSerializer.cs" />
-    <Compile Include="Serialization\DefaultJsonSerializerSettings.cs" />
-    <Compile Include="Http\BasicAuthorizationString.cs" />
-    <Compile Include="Http\HttpContentTypes.cs" />
-    <Compile Include="HttpRequest.cs" />
-    <Compile Include="HttpRequester.cs" />
-    <Compile Include="Extensions\HttpExtensions.cs" />
-    <Compile Include="Extensions\TaskExtensions.cs" />
-    <Compile Include="Extensions\UriExtensions.cs" />
-    <Compile Include="Http\HttpRequesterHeaders.cs" />
-    <Compile Include="HttpResponse.cs" />
-    <Compile Include="IHttpRequester.cs" />
-    <Compile Include="Http\JsonContent.cs" />
-    <Compile Include="IJsonSerializer.cs" />
-    <Compile Include="NullString.cs" />
+    <Compile Include="AssertionExceptionFactory.cs" />
+    <Compile Include="HttpResponseValidation.cs" />
+    <Compile Include="JsonHttpResponseValidation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Extensions\JTokenExtensions.cs" />
+    <Compile Include="RequesterAssertionException.cs" />
+    <Compile Include="Should.cs" />
+    <Compile Include="TypeExtensions.cs" />
+    <Compile Include="ValidationExtensions.cs" />
+    <Compile Include="When.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Requester\Requester.csproj">
+      <Project>{2c5a9bd7-7698-440a-8001-9463d3aed95a}</Project>
+      <Name>Requester</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

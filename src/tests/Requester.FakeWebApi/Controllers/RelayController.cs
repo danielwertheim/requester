@@ -1,8 +1,8 @@
 ﻿using System.Net.Http;
 using System.Web.Http;
-using Requester.TestWebApi.Model;
+using Requester.FakeWebApi.Model;
 
-namespace Requester.TestWebApi.Controllers
+namespace Requester.FakeWebApi.Controllers
 {
     [RoutePrefix("api/relay")]
     public class RelayController : ApiController

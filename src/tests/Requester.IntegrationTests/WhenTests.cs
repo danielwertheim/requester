@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net;
 using Microsoft.Owin.Testing;
-using Requester.TestWebApi;
-using Requester.TestWebApi.Model;
+using Requester.FakeWebApi;
+using Requester.FakeWebApi.Model;
 using Requester.Validation;
 using Xunit;
 

@@ -94,7 +94,7 @@ namespace Requester.IntegrationTests
                     .HaveStatus(HttpStatusCode.Created));
 
             var postEntityResponse = _dbRequester
-                .PostEntityAsync(new
+                .PostEntityAsJsonAsync(new
                 {
                     _id = "ent1",
                     Name = "Daniel Wertheim",
@@ -120,7 +120,7 @@ namespace Requester.IntegrationTests
                     .HaveStatus(HttpStatusCode.Created));
 
             var putEntityResponse = _dbRequester
-                .PutEntityAsync(new
+                .PutEntityAsJsonAsync(new
                 {
                     Name = "John Doe",
                     Address = new
@@ -198,7 +198,7 @@ namespace Requester.IntegrationTests
         [Fact]
         public async void Can_use_basic_auth_on_HttpRequester()
         {
-            using (var requester = new HttpRequester(DbUrl).WithBasicAuthorization(U,P))
+            using (var requester = new HttpRequester(DbUrl).Configure(cfg => cfg.WithBasicAuthorization(U,P)))
             {
                 var db = await requester.PutAsync();
                 db.TheResponse(should => should.BeSuccessful());
@@ -206,7 +206,7 @@ namespace Requester.IntegrationTests
                 var newDoc = await requester.PostJsonAsync("{\"value\":\"can_use_basic_auth_on_HttpRequester\"}");
                 newDoc.TheResponse(should => should.BeSuccessful());
 
-                var deleteDoc = await requester.DeleteAsync(newDoc.Location.Replace(requester.BaseAddress.ToString(), string.Empty) + "?rev=" + newDoc.ETag);
+                var deleteDoc = await requester.DeleteAsync(newDoc.Location.Replace(requester.Config.BaseAddress.ToString(), string.Empty) + "?rev=" + newDoc.ETag);
                 deleteDoc.TheResponse(should => should.BeSuccessful());
             }
         }
@@ -214,7 +214,7 @@ namespace Requester.IntegrationTests
         [Fact]
         public async void Can_have_resulting_entity_with_Post_HttpRequester()
         {
-            using (var requester = new HttpRequester(DbUrl).WithBasicAuthorization(U, P))
+            using (var requester = new HttpRequester(DbUrl).Configure(cfg => cfg.WithBasicAuthorization(U, P)))
             {
                 var db = await requester.PutAsync();
                 db.TheResponse(should => should.BeSuccessful());

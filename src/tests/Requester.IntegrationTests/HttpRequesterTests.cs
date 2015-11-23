@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using FluentAssertions;
 using Microsoft.Owin.Testing;
-using Requester.TestWebApi;
-using Requester.TestWebApi.Model;
+using Requester.FakeWebApi;
+using Requester.FakeWebApi.Model;
 using Requester.Validation;
 using Xunit;
 
@@ -84,7 +83,7 @@ namespace Requester.IntegrationTests
 
             using (var requester = new HttpRequester($"{_server.BaseAddress}/api/persons/", _server.Handler))
             {
-                var forTheCreatingPut = await requester.PutEntityAsync(person);
+                var forTheCreatingPut = await requester.PutEntityAsJsonAsync(person);
                 forTheCreatingPut.TheResponse(should => should
                     .BeSuccessful()
                     .HaveStatus(HttpStatusCode.Created));
@@ -96,7 +95,7 @@ namespace Requester.IntegrationTests
                     .HaveSpecificValueFor("firstName", "Daniel"));
 
                 person.Age = 42;
-                var forTheUpdatingPut = await requester.PutEntityAsync(person);
+                var forTheUpdatingPut = await requester.PutEntityAsJsonAsync(person);
                 forTheUpdatingPut.TheResponse(should => should
                     .BeSuccessful()
                     .HaveStatus(HttpStatusCode.OK));
@@ -106,7 +105,7 @@ namespace Requester.IntegrationTests
                     .BeSuccessful()
                     .HaveStatus(HttpStatusCode.OK));
 
-                var forTheCreatingPost = await requester.PostEntityAsync(person);
+                var forTheCreatingPost = await requester.PostEntityAsJsonAsync(person);
                 forTheCreatingPost.TheResponse(should => should
                     .BeSuccessful()
                     .HaveStatus(HttpStatusCode.Created)
