@@ -4,7 +4,6 @@ var gulp = require('gulp'),
     flatten = require('gulp-flatten'),
     shell = require('gulp-shell'),
     del = require('del'),
-    msbuild = require('gulp-msbuild'),
     assemblyInfo = require('gulp-dotnet-assembly-info'),
     argv = require('yargs').argv,
     sequence = require('run-sequence');
@@ -19,12 +18,16 @@ var ver = '1.0.0',
             semver: ver + '-rc1',
             revision: argv && argv.buildrevision ? argv.buildrevision : '0',
             profile: argv && argv.buildprofile ? argv.buildprofile : 'Release'
+        },
+        tools: {
+            msbuild: '"C:/Program Files (x86)/MSBuild/14.0/Bin/MSBuild.exe"',
+            xunit: '"./tools/xunit.runner.console.2.1.0/tools/xunit.console.exe"'
         }
     };
 
 gulp.task('default', function (cb) {
     sequence(
-        ['clean', 'assemblyinfo'],
+        ['clean','assemblyinfo'],
         'build',
         'integration-tests',
         'copy',
@@ -49,7 +52,7 @@ gulp.task('nuget-restore', function () {
 });
 
 gulp.task('clean', function(cb) {
-    del(config.build.outdir, cb);
+    return del(config.build.outdir);
 });
 
 gulp.task('assemblyinfo', function() {
@@ -62,15 +65,8 @@ gulp.task('assemblyinfo', function() {
 });
 
 gulp.task('build', function() {
-    return gulp.src(config.srcdir + '*.sln')
-        .pipe(msbuild({
-            toolsVersion: 14.0,
-            configuration: config.build.profile,
-            targets: ['Clean', 'Rebuild'],
-            errorOnFail: true,
-            stdout: true,
-            verbosity: 'minimal'
-        }));
+    return gulp.src(config.srcdir + '*.sln', { read: false })
+        .pipe(shell(config.tools.msbuild + ' <%= file.path %> /v:quiet /t:Clean /t:Rebuild /p:Configuration=' + config.build.profile));
 });
 
 gulp.task('copy', function() {
@@ -85,7 +81,7 @@ gulp.task('copy', function() {
 
 gulp.task('integration-tests', function () {
     return gulp.src(config.srcdir + 'tests/**/bin/' + config.build.profile + '/*.IntegrationTests.dll')
-        .pipe(shell('xunit.console.exe <%= file.path %> -noshadow', { cwd: './tools/xunit.runner.console.2.1.0/tools/' }));
+        .pipe(shell(config.tools.xunit + ' <%= file.path %> -noshadow'));
 });
 
 gulp.task('nuget-pack', function () {
