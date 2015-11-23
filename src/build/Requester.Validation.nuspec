@@ -16,7 +16,7 @@
           <frameworkAssembly assemblyName="System.Net.Http" targetFramework="net45" />
         </frameworkAssemblies>
         <dependencies>
-           <group targetFramework="net452">
+           <group targetFramework="net45">
              <dependency id="Requester" version="$version$" />
              <dependency id="Ensure.That" version="3.3.0" />
              <dependency id="Newtonsoft.Json" version="7.0.1" />
