@@ -99,7 +99,7 @@ requester.Config
 ```
 
 ### Requester.Validation NuGet
-The [Requester.Validation package](https://www.nuget.org/packages/requester), is used for validation of Web APIs.
+The [Requester.Validation package](https://www.nuget.org/packages/requester.validation), is used for validation of Web APIs.
 
 ```csharp
 using Requester;
