@@ -14,9 +14,8 @@ var ver = '1.0.0',
         projects: ['Requester', 'Requester.Validation'],
         build: {
             outdir: './artifacts/',
-            version: ver,
-            semver: ver + '-rc1',
-            revision: argv && argv.buildrevision ? argv.buildrevision : '0',
+            semver: ver, //suffix e.g. 'rc-1'
+            version: ver + '.' + (argv && argv.buildrevision ? argv.buildrevision : '0'),
             profile: argv && argv.buildprofile ? argv.buildprofile : 'Release'
         },
         tools: {
@@ -58,7 +57,7 @@ gulp.task('clean', function(cb) {
 gulp.task('assemblyinfo', function() {
     return gulp.src(config.srcdir + 'GlobalAssemblyInfo.cs')
         .pipe(assemblyInfo({
-          version: config.build.version + '.' + config.build.revision,
+          version: config.build.version,
           informationalVersion: config.build.semver
         }))
         .pipe(gulp.dest(config.srcdir));
