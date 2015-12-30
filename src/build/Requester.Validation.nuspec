@@ -17,13 +17,13 @@
         </frameworkAssemblies>
         <dependencies>
            <group targetFramework="net45">
-             <dependency id="Requester" version="$version$" />
+             <dependency id="Requester" version="[$version$]" />
              <dependency id="Ensure.That" version="3.3.0" />
              <dependency id="Newtonsoft.Json" version="7.0.1" />
            </group>
         </dependencies>
     </metadata>
     <files>
-        <file src="Requester.Validation\Requester.Validation.dll" target="lib\net45\Requester.Validation.dll"/>
+        <file src="Requester.Validation\Requester.Validation.dll" target="lib\net45"/>
     </files>
 </package>
