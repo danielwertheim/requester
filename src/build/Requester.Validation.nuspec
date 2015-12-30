@@ -18,7 +18,7 @@
         <dependencies>
            <group targetFramework="net45">
              <dependency id="Requester" version="[$version$]" />
-             <dependency id="Ensure.That" version="3.3.0" />
+             <dependency id="Ensure.That" version="4.0.0" />
              <dependency id="Newtonsoft.Json" version="7.0.1" />
            </group>
         </dependencies>
