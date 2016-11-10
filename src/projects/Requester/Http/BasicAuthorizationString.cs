@@ -4,9 +4,9 @@ using EnsureThat;
 
 namespace Requester.Http
 {
-    public class BasicAuthorizationString
+    public class BasicAuthorizationString : IEquatable<string>, IEquatable<BasicAuthorizationString>
     {
-        public string Value { get; private set; }
+        public string Value { get; }
 
         public BasicAuthorizationString(string username, string password)
         {
@@ -16,16 +16,39 @@ namespace Requester.Http
             Value = GenerateBasicAuthorizationCredentials(username, password);
         }
 
-        private string GenerateBasicAuthorizationCredentials(string username, string password)
+        private static string GenerateBasicAuthorizationCredentials(string username, string password)
         {
-            var credentialsBytes = Encoding.UTF8.GetBytes(string.Format("{0}:{1}", username, password));
+            var credentialsBytes = Encoding.UTF8.GetBytes($"{username}:{password}");
 
             return Convert.ToBase64String(credentialsBytes);
         }
 
-        public static implicit operator string(BasicAuthorizationString item)
+        public static implicit operator string(BasicAuthorizationString item) => item.Value;
+
+        public override bool Equals(object obj)
         {
-            return item.Value;
+            if (obj is string)
+                return Equals(obj as string);
+
+            if (obj is BasicAuthorizationString)
+                return Equals(obj as BasicAuthorizationString);
+
+            return false;
+        }
+
+        public bool Equals(BasicAuthorizationString other)
+        {
+            return Equals(other?.Value);
+        }
+
+        public bool Equals(string other)
+        {
+            return string.Equals(Value, other);
+        }
+
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
         }
 
         public override string ToString()
