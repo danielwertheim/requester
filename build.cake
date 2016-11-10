@@ -11,7 +11,10 @@ Task("Default")
     .IsDependentOn("AssemblyVersion")
     .IsDependentOn("Build")
     .IsDependentOn("UnitTests")
-    .IsDependentOn("IntegrationTests")
+    .IsDependentOn("IntegrationTests");
+
+Task("CI")
+    .IsDependentOn("Default")
     .IsDependentOn("NuGet-Pack");
   
 Task("InitOutDir")
