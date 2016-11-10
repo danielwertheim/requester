@@ -17,12 +17,13 @@
         </frameworkAssemblies>
         <dependencies>
            <group targetFramework="net45">
-             <dependency id="Ensure.That" version="4.0.0" />
-             <dependency id="Newtonsoft.Json" version="8.0.2" />
+             <dependency id="Ensure.That" version="5.0.0" />
+             <dependency id="Newtonsoft.Json" version="9.0.1" />
            </group>
         </dependencies>
     </metadata>
     <files>
-        <file src="Requester\Requester.dll" target="lib\net45"/>
+        <file src="projects\Requester\bin\$configuration$\Requester.dll" target="lib\net45"/>
+        <file src="projects\Requester\bin\$configuration$\Requester.xml" target="lib\net45"/>
     </files>
 </package>

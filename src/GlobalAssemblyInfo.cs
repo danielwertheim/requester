@@ -11,9 +11,6 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyDescription("Requester - a Http-request fiddling magical something that assists e.g. with response validation.")]
 [assembly: AssemblyCompany("Daniel Wertheim")]
-[assembly: AssemblyCopyright("Copyright © 2015 Daniel Wertheim")]
+[assembly: AssemblyCopyright("Copyright © 2015, 2016 Daniel Wertheim")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-
-[assembly: AssemblyVersion("0.0.0.*")]
-[assembly: AssemblyInformationalVersion("0.0.0.*")]

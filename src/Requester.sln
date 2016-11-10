@@ -8,6 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A762661E-88EC-40BA-A291-B30F8C9EE2B3}"
 	ProjectSection(SolutionItems) = preProject
 		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
+		GlobalAssemblyVersion.cs = GlobalAssemblyVersion.cs
+		Requester.nuspec = Requester.nuspec
+		Requester.Validation.nuspec = Requester.Validation.nuspec
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Requester.IntegrationTests", "tests\Requester.IntegrationTests\Requester.IntegrationTests.csproj", "{A8B59980-68BC-4C88-803B-9A913B0C6626}"
