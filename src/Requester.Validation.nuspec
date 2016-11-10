@@ -10,7 +10,7 @@
         <description>Assists with validating responses from web APIs. E.g. by validation of JSON-schema etc.</description>
         <projectUrl>https://github.com/danielwertheim/requester</projectUrl>
         <licenseUrl>https://raw.githubusercontent.com/danielwertheim/requester/master/LICENSE.txt</licenseUrl>
-        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
         <tags>http web api json response validation</tags>
         <frameworkAssemblies>
           <frameworkAssembly assemblyName="System.Net.Http" targetFramework="net45" />
@@ -18,12 +18,13 @@
         <dependencies>
            <group targetFramework="net45">
              <dependency id="Requester" version="[$version$]" />
-             <dependency id="Ensure.That" version="4.0.0" />
-             <dependency id="Newtonsoft.Json" version="8.0.2" />
+             <dependency id="Ensure.That" version="5.0.0" />
+             <dependency id="Newtonsoft.Json" version="9.0.1" />
            </group>
         </dependencies>
     </metadata>
     <files>
-        <file src="Requester.Validation\Requester.Validation.dll" target="lib\net45"/>
+        <file src="projects\Requester.Validation\bin\$configuration$\Requester.Validation.dll" target="lib\net45"/>
+        <file src="projects\Requester.Validation\bin\$configuration$\Requester.Validation.xml" target="lib\net45"/>
     </files>
 </package>
