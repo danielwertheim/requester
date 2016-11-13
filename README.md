@@ -55,7 +55,7 @@ The response of the `HttpRequester` is a `HttpResponse`.
 var response = await requester.SendAsync(new HttpRequest(HttpMethod.Get, "/mydocid"));
 
 //The resonse has like: StatusCode, Reason, Content, ETag, ContentType etc.
-Debug.WriteLine(response.ToStringDebugVersion(includeContent: true));
+Debug.WriteLine(response.ToStringDebugVersion());
 ```
 
 The output would be:
