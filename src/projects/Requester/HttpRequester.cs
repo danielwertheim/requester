@@ -22,11 +22,12 @@ namespace Requester
         public IHttpRequesterConfig Config => this;
         public IJsonSerializer JsonSerializer { get; }
 
-        public HttpRequester(string url, HttpMessageHandler handler = null) : this(new Uri(url), handler) { }
+        public HttpRequester(string url, HttpMessageHandler handler = null, IJsonSerializer serializer = null)
+            : this(new Uri(url), handler, serializer) { }
 
-        public HttpRequester(Uri uri = null, HttpMessageHandler handler = null)
+        public HttpRequester(Uri uri = null, HttpMessageHandler handler = null, IJsonSerializer serializer = null)
         {
-            JsonSerializer = new DefaultJsonSerializer();
+            JsonSerializer = serializer ?? new DefaultJsonSerializer();
             HttpClient = CreateHttpClient(uri, handler);
         }
 
@@ -352,7 +353,7 @@ namespace Requester
             foreach (var header in request.Headers)
                 requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value);
 
-            if(request.Content != null)
+            if (request.Content != null)
                 requestMessage.Content = request.Content;
 
             return requestMessage;
