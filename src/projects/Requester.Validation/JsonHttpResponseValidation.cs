@@ -14,8 +14,9 @@ namespace Requester.Validation
             if (response == null)
                 throw AssertionExceptionFactory.Create("Expected response to be an instance, but got NULL.");
 
-            if (response.ContentType != "application/json")
-                throw AssertionExceptionFactory.CreateForResponse(response, "Expected response content type to be '{0}', but got '{1}'.", NullString.IfNull(response.ContentType));
+            const string expectedContentType = "application/json";
+            if (response.ContentType != expectedContentType)
+                throw AssertionExceptionFactory.CreateForResponse(response, "Expected response content type to be '{0}', but got '{1}'.", expectedContentType, NullString.IfNull(response.ContentType));
 
             Response = response;
         }

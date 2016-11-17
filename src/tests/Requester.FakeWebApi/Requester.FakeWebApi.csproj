@@ -117,6 +117,7 @@
     <Compile Include="..\..\GlobalAssemblyVersion.cs">
       <Link>Properties\GlobalAssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\RelayController.cs" />
     <Compile Include="Model\Item.cs" />
     <Compile Include="Storage\InMemPersonStore.cs" />

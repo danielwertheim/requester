@@ -19,9 +19,11 @@ namespace Requester.Serialization
             return JsonConvert.SerializeObject(item, Settings);
         }
 
-        public virtual T Deserialize<T>(string json)
+        public virtual T Deserialize<T>(string json) where T : class
         {
-            return JsonConvert.DeserializeObject<T>(json, Settings);
+            return string.IsNullOrWhiteSpace(json)
+                ? null
+                : JsonConvert.DeserializeObject<T>(json, Settings);
         }
     }
 }

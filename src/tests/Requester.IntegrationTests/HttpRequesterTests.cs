@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using FluentAssertions;
 using Microsoft.Owin.Testing;
 using Requester.FakeWebApi;
 using Requester.FakeWebApi.Model;
@@ -26,6 +27,63 @@ namespace Requester.IntegrationTests
 
             _server?.Dispose();
             _server = null;
+        }
+
+        [Fact]
+        public async void Can_retrieve_no_content()
+        {
+            using (var requester = new HttpRequester($"{_server.BaseAddress}/api/test/nocontent", _server.Handler))
+            {
+                var request = new HttpRequest(HttpMethod.Get);
+                request.WithAccept(ct => ct.ApplicationJson);
+
+                var response = await requester.SendAsync(request);
+                response.TheResponse(should => should
+                    .BeSuccessful());
+
+                var entityResponse = await requester.GetAsync<Person>();
+                entityResponse.TheResponse(should => should
+                    .BeSuccessful());
+                entityResponse.Content.Should().BeNull();
+            }
+        }
+
+        [Fact]
+        public async void Can_retrieve_null_content()
+        {
+            using (var requester = new HttpRequester($"{_server.BaseAddress}/api/test/null", _server.Handler))
+            {
+                var request = new HttpRequest(HttpMethod.Get);
+                request.WithAccept(ct => ct.ApplicationJson);
+
+                var textResponse = await requester.SendAsync(request);
+                textResponse.TheResponse(should => should
+                    .BeSuccessful());
+
+                var entityResponse = await requester.GetAsync<Person>();
+                entityResponse.TheResponse(should => should
+                    .BeSuccessful());
+                entityResponse.Content.Should().BeNull();
+            }
+        }
+
+        [Fact]
+        public async void Can_retrieve_empty_content()
+        {
+            using (var requester = new HttpRequester($"{_server.BaseAddress}/api/test/empty", _server.Handler))
+            {
+                var request = new HttpRequest(HttpMethod.Get);
+                request.WithAccept(ct => ct.ApplicationJson);
+
+                var textResponse = await requester.SendAsync(request);
+                textResponse.TheResponse(should => should
+                    .BeSuccessful());
+
+                var entityResponse = await requester.GetAsync<Person>();
+                entityResponse.TheResponse(should => should
+                    .BeSuccessful());
+                entityResponse.Content.Should().BeNull();
+            }
         }
 
         [Fact]
