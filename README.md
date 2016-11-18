@@ -25,7 +25,7 @@ using Requester;
 
 ```csharp
 //Sample of interacting with a CouchDB instance
-using(var requester = new HttpRequester("http://localhost:5984/mydb"))
+using(var requester = HttpRequester.Create("http://localhost:5984/mydb"))
 {
   //Ensure db is created
   await requester.SendAsync(new HttpRequest(HttpMethod.Put));
@@ -81,7 +81,7 @@ You can configure it e.g. at contruction to via `Configure()` or via `Config`.
 
 ```csharp
 //Using Configure function
-using (var requester = new HttpRequester("http://localhost").Configure(cfg => cfg
+using (var requester = HttpRequester.Create("http://localhost").Configure(cfg => cfg
     .WithBasicAuthorization("foo", "bar")
     .WithTimeout(TimeSpan.FromSeconds(30))
     .WithAccept("text/plain")))
