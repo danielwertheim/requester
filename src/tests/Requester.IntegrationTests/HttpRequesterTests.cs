@@ -32,7 +32,7 @@ namespace Requester.IntegrationTests
         [Fact]
         public async void Can_retrieve_no_content()
         {
-            using (var requester = new HttpRequester($"{_server.BaseAddress}/api/test/nocontent", _server.Handler))
+            using (var requester = HttpRequester.Create($"{_server.BaseAddress}/api/test/nocontent", _server.Handler))
             {
                 var request = new HttpRequest(HttpMethod.Get);
                 request.WithAccept(ct => ct.ApplicationJson);
@@ -51,7 +51,7 @@ namespace Requester.IntegrationTests
         [Fact]
         public async void Can_retrieve_null_content()
         {
-            using (var requester = new HttpRequester($"{_server.BaseAddress}/api/test/null", _server.Handler))
+            using (var requester = HttpRequester.Create($"{_server.BaseAddress}/api/test/null", _server.Handler))
             {
                 var request = new HttpRequest(HttpMethod.Get);
                 request.WithAccept(ct => ct.ApplicationJson);
@@ -70,7 +70,7 @@ namespace Requester.IntegrationTests
         [Fact]
         public async void Can_retrieve_empty_content()
         {
-            using (var requester = new HttpRequester($"{_server.BaseAddress}/api/test/empty", _server.Handler))
+            using (var requester = HttpRequester.Create($"{_server.BaseAddress}/api/test/empty", _server.Handler))
             {
                 var request = new HttpRequest(HttpMethod.Get);
                 request.WithAccept(ct => ct.ApplicationJson);
@@ -89,7 +89,7 @@ namespace Requester.IntegrationTests
         [Fact]
         public async void Can_POST_form_url_encoded_content()
         {
-            using (var requester = new HttpRequester($"{_server.BaseAddress}/api/relay/", _server.Handler))
+            using (var requester = HttpRequester.Create($"{_server.BaseAddress}/api/relay/", _server.Handler))
             {
                 var request = new HttpRequest(HttpMethod.Post);
                 request.WithContent(new FormUrlEncodedContent(new Dictionary<string, string>
@@ -110,7 +110,7 @@ namespace Requester.IntegrationTests
         [Fact]
         public async void Can_PUT_form_url_encoded_content()
         {
-            using (var requester = new HttpRequester($"{_server.BaseAddress}/api/relay/", _server.Handler))
+            using (var requester = HttpRequester.Create($"{_server.BaseAddress}/api/relay/", _server.Handler))
             {
                 var request = new HttpRequest(HttpMethod.Put);
                 request.WithContent(new FormUrlEncodedContent(new Dictionary<string, string>
@@ -139,7 +139,7 @@ namespace Requester.IntegrationTests
                 Age = 35
             };
 
-            using (var requester = new HttpRequester($"{_server.BaseAddress}/api/persons/", _server.Handler))
+            using (var requester = HttpRequester.Create($"{_server.BaseAddress}/api/persons/", _server.Handler))
             {
                 var forTheCreatingPut = await requester.PutEntityAsJsonAsync(person);
                 forTheCreatingPut.TheResponse(should => should

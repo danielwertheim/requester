@@ -17,7 +17,7 @@ namespace Requester.IntegrationTests
 
         public CouchDbTests()
         {
-            _dbRequester = new HttpRequester(DbUrlWithCredentials);
+            _dbRequester = HttpRequester.Create(DbUrlWithCredentials);
             var head = _dbRequester.HeadAsync().Result;
             if(head.IsSuccess)
                 _dbRequester.DeleteAsync().Wait();
@@ -198,7 +198,7 @@ namespace Requester.IntegrationTests
         [Fact]
         public async void Can_use_basic_auth_on_HttpRequester()
         {
-            using (var requester = new HttpRequester(DbUrl).Configure(cfg => cfg.WithBasicAuthorization(U,P)))
+            using (var requester = HttpRequester.Create(DbUrl).Configure(cfg => cfg.WithBasicAuthorization(U,P)))
             {
                 var db = await requester.PutAsync();
                 db.TheResponse(should => should.BeSuccessful());
@@ -214,7 +214,7 @@ namespace Requester.IntegrationTests
         [Fact]
         public async void Can_have_resulting_entity_with_Post_HttpRequester()
         {
-            using (var requester = new HttpRequester(DbUrl).Configure(cfg => cfg.WithBasicAuthorization(U, P)))
+            using (var requester = HttpRequester.Create(DbUrl).Configure(cfg => cfg.WithBasicAuthorization(U, P)))
             {
                 var db = await requester.PutAsync();
                 db.TheResponse(should => should.BeSuccessful());

@@ -22,10 +22,23 @@ namespace Requester
         public IHttpRequesterConfig Config => this;
         public IJsonSerializer JsonSerializer { get; }
 
-        public HttpRequester(string url, HttpMessageHandler handler = null, IJsonSerializer serializer = null)
-            : this(new Uri(url), handler, serializer) { }
+        public static HttpRequester Create(string url, HttpMessageHandler handler = null, IJsonSerializer serializer = null)
+            => Create(new Uri(url), handler, serializer);
 
-        public HttpRequester(Uri uri = null, HttpMessageHandler handler = null, IJsonSerializer serializer = null)
+        public static HttpRequester Create(Uri uri = null, HttpMessageHandler handler = null, IJsonSerializer serializer = null)
+            => new HttpRequester(uri, handler, serializer);
+
+        [Obsolete("Use static factory method instead. This will be removed in future major version.")]
+        public HttpRequester(string url, HttpMessageHandler handler = null)
+            : this(new Uri(url), handler) { }
+
+        [Obsolete("Use static factory method instead. This will be removed in future major version.")]
+        public HttpRequester(Uri uri = null, HttpMessageHandler handler = null)
+            : this(uri, handler, new DefaultJsonSerializer())
+        {
+        }
+
+        private HttpRequester(Uri uri, HttpMessageHandler handler, IJsonSerializer serializer)
         {
             JsonSerializer = serializer ?? new DefaultJsonSerializer();
             HttpClient = CreateHttpClient(uri, handler);

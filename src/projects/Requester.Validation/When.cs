@@ -85,7 +85,7 @@ namespace Requester.Validation
 
             var request = new HttpRequest(method);
 
-            using (var requester = new HttpRequester(url, MessageHandlerFn?.Invoke()))
+            using (var requester = HttpRequester.Create(url, MessageHandlerFn?.Invoke()))
             {
                 var content = contentFn?.Invoke(requester.JsonSerializer);
                 if (!string.IsNullOrWhiteSpace(content))
