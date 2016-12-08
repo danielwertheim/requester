@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -406,6 +408,8 @@ namespace Requester
 
                 response.StatusCode = message.StatusCode;
                 response.Reason = message.ReasonPhrase;
+                response.Headers = message.Content?.Headers?.ToDictionary(h => h.Key, v => v.Value) ??
+                                   new Dictionary<string, IEnumerable<string>>();
 
                 if (message.Content?.Headers != null)
                 {

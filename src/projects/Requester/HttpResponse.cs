@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using Requester.Serialization;
@@ -43,6 +44,7 @@ namespace Requester
         public Uri RequestUri { get; set; }
         public HttpMethod RequestMethod { get; set; }
         public string Reason { get; set; }
+        public Dictionary<string, IEnumerable<string>> Headers { get; set; }
         public bool IsSuccess => (int)StatusCode >= 200 && (int)StatusCode < 300;
 
         public override string ToString()
