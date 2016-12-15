@@ -7,6 +7,7 @@ namespace Requester.Http
         public string Accept => "Accept";
         public string Authorization => "Authorization";
         public string IfMatch => "If-Match";
+        public string IfNoneMatch => "If-None-Match";
 
         static HttpRequesterHeaders()
         {

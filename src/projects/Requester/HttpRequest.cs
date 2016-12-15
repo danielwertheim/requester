@@ -40,6 +40,11 @@ namespace Requester
             return WithHeader(HttpRequesterHeaders.Instance.IfMatch, value);
         }
 
+        public virtual HttpRequest WithIfNoneMatch(string value)
+        {
+            return WithHeader(HttpRequesterHeaders.Instance.IfNoneMatch, value);
+        }
+
         public virtual HttpRequest WithHeader(Func<HttpRequesterHeaders, string> picker, string value)
         {
             return WithHeader(picker(HttpRequesterHeaders.Instance), value);

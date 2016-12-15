@@ -135,6 +135,11 @@ namespace Requester
             return Config.WithHeader(HttpRequesterHeaders.Instance.IfMatch, value);
         }
 
+        IHttpRequesterConfig IHttpRequesterConfig.WithIfNoneMatch(string value)
+        {
+            return Config.WithHeader(HttpRequesterHeaders.Instance.IfNoneMatch, value);
+        }
+
         IHttpRequesterConfig IHttpRequesterConfig.WithHeader(Func<HttpRequesterHeaders, string> picker, string value)
         {
             return Config.WithHeader(picker(HttpRequesterHeaders.Instance), value);

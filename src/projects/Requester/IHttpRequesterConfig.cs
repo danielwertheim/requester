@@ -15,6 +15,7 @@ namespace Requester
         IHttpRequesterConfig WithAccept(Func<HttpContentTypes, string> picker);
         IHttpRequesterConfig WithAccept(string value);
         IHttpRequesterConfig WithIfMatch(string value);
+        IHttpRequesterConfig WithIfNoneMatch(string value);
         IHttpRequesterConfig WithHeader(Func<HttpRequesterHeaders, string> picker, string value);
         IHttpRequesterConfig WithHeader(string name, string value);
         IHttpRequesterConfig WithAuthorization(string value);
