@@ -413,7 +413,7 @@ namespace Requester
 
                 response.StatusCode = message.StatusCode;
                 response.Reason = message.ReasonPhrase;
-                response.Headers = message.Content?.Headers?.ToDictionary(h => h.Key, v => v.Value) ??
+                response.Headers = message.Headers?.ToDictionary(h => h.Key, v => v.Value) ??
                                    new Dictionary<string, IEnumerable<string>>();
 
                 if (message.Content?.Headers != null)
