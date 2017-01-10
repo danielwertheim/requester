@@ -11,8 +11,8 @@ namespace Requester.IntegrationTests
     {
         private const string U = "dev";
         private const string P = "1q2w3e4r";
-        private const string DbUrl = "http://192.168.2.20:5984/mydb/";
-        private static readonly string DbUrlWithCredentials = $"http://{U}:{P}@192.168.2.20:5984/mydb/";
+        private const string DbUrl = "http://ubuntu01:5984/mydb/";
+        private static readonly string DbUrlWithCredentials = $"http://{U}:{P}@ubuntu01:5984/mydb/";
         private readonly HttpRequester _dbRequester;
 
         public CouchDbTests()
