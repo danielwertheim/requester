@@ -9,10 +9,11 @@ namespace Requester.IntegrationTests
 {
     public class CouchDbTests : IDisposable
     {
-        private const string U = "dev";
-        private const string P = "1q2w3e4r";
-        private const string DbUrl = "http://ubuntu01:5984/mydb/";
-        private static readonly string DbUrlWithCredentials = $"http://{U}:{P}@ubuntu01:5984/mydb/";
+        private const string H = "devwin201601";
+        private const string U = "requester_tester";
+        private const string P = "p@ssword";
+        private static readonly string DbUrl = $"http://{H}:5984/mydb/";
+        private static readonly string DbUrlWithCredentials = $"http://{U}:{Uri.EscapeDataString(P)}@{H}:5984/mydb/";
         private readonly HttpRequester _dbRequester;
 
         public CouchDbTests()
@@ -52,13 +53,13 @@ namespace Requester.IntegrationTests
                 .TheResponse(should => should
                     .BeSuccessful()
                     .BeJsonResponse()
-                    .HaveJsonConformingToSchema(@"{
-                        _id: {type: 'string', required: true},
-                        _rev: {type: 'string', required: true},
-                        name: {type: 'string'},
+                    .HaveJsonConformingToSchemaAsync(@"{type: 'object', properties: {
+                        _id: {type: 'integer'},
+                        _rev: {type: 'string'},
+                        name2: {type: 'string'},
                         address: {type: 'object', properties: {zip: {type: 'integer'}}},
                         hobbies: {type: 'array', items: {type: 'string'}}
-                    }")
+                    }, required: ['_id', '_rev', 'name2', 'address', 'hobbies']}").Result
                     .Match(new { _id = "doc1", name = "Daniel Wertheim" }));
 
             When.GetOfJson(DbUrlWithCredentials + "doc2")
@@ -141,13 +142,13 @@ namespace Requester.IntegrationTests
                 .TheResponse(should => should
                     .BeSuccessful()
                     .BeJsonResponse()
-                    .HaveJsonConformingToSchema(@"{
-                        _id: {type: 'string', required: true},
-                        _rev: {type: 'string', required: true},
+                    .HaveJsonConformingToSchemaAsync(@"{type: 'object', properties: {
+                        _id: {type: 'string'},
+                        _rev: {type: 'string'},
                         name: {type: 'string'},
                         address: {type: 'object', properties: {zip: {type: 'integer'}}},
                         hobbies: {type: 'array', items: {type: 'string'}}
-                    }")
+                    }, required: ['_id', '_rev', 'name', 'address', 'hobbies']}").Result
                     .Match(new { _id = "doc1", name = "Daniel Wertheim" }));
 
             var getEnt1Response = _dbRequester.GetAsync("/ent1").Result;
@@ -155,13 +156,13 @@ namespace Requester.IntegrationTests
                 .TheResponse(should => should
                     .BeSuccessful()
                     .BeJsonResponse()
-                    .HaveJsonConformingToSchema(@"{
-                        _id: {type: 'string', required: true},
-                        _rev: {type: 'string', required: true},
+                    .HaveJsonConformingToSchemaAsync(@"{type: 'object', properties: {
+                        _id: {type: 'string'},
+                        _rev: {type: 'string'},
                         name: {type: 'string'},
                         address: {type: 'object', properties: {zip: {type: 'integer'}}},
                         hobbies: {type: 'array', items: {type: 'string'}}
-                    }")
+                    }, required: ['_id', '_rev', 'name', 'address', 'hobbies']}").Result
                     .Match(new { _id = "ent1", name = "Daniel Wertheim" }));
 
             var getDoc2Response = _dbRequester.GetAsync("/doc2").Result;
@@ -203,10 +204,11 @@ namespace Requester.IntegrationTests
                 var db = await requester.PutAsync();
                 db.TheResponse(should => should.BeSuccessful());
 
-                var newDoc = await requester.PostJsonAsync("{\"value\":\"can_use_basic_auth_on_HttpRequester\"}");
+                var docId = Guid.NewGuid().ToString("N");
+                var newDoc = await requester.PutJsonAsync("{\"value\":\"can_use_basic_auth_on_HttpRequester\"}", docId);
                 newDoc.TheResponse(should => should.BeSuccessful());
 
-                var deleteDoc = await requester.DeleteAsync(newDoc.Location.Replace(requester.Config.BaseAddress.ToString(), string.Empty) + "?rev=" + newDoc.ETag);
+                var deleteDoc = await requester.DeleteAsync(docId + "?rev=" + newDoc.ETag);
                 deleteDoc.TheResponse(should => should.BeSuccessful());
             }
         }
@@ -223,8 +225,9 @@ namespace Requester.IntegrationTests
                 newDoc.TheResponse(should => should.BeSuccessful());
 
                 string id = newDoc.Content.id;
+                string rev = newDoc.Content.rev;
 
-                var putDoc = await requester.PutJsonAsync<dynamic>("{\"value\":\"two\"}", $"{id}?rev={newDoc.ETag}");
+                var putDoc = await requester.PutJsonAsync<dynamic>("{\"value\":\"two\"}", $"{id}?rev={rev}");
                 putDoc.TheResponse(should => should.BeSuccessful());
             }
         }

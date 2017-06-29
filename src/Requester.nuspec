@@ -18,7 +18,7 @@
         <dependencies>
            <group targetFramework="net45">
              <dependency id="Ensure.That" version="5.0.0" />
-             <dependency id="Newtonsoft.Json" version="9.0.1" />
+             <dependency id="Newtonsoft.Json" version="10.0.3" />
            </group>
         </dependencies>
     </metadata>

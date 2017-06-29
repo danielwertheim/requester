@@ -19,7 +19,7 @@
            <group targetFramework="net45">
              <dependency id="Requester" version="[$version$]" />
              <dependency id="Ensure.That" version="5.0.0" />
-             <dependency id="Newtonsoft.Json" version="9.0.1" />
+             <dependency id="NJsonSchema" version="9.2.3" />
            </group>
         </dependencies>
     </metadata>

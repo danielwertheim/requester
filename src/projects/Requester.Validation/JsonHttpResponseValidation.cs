@@ -1,6 +1,11 @@
+using System;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
+using NJsonSchema;
 using Requester.Extensions;
 
 namespace Requester.Validation
@@ -34,7 +39,7 @@ namespace Requester.Validation
 
         public JsonHttpResponseValidation HaveAnyContent()
         {
-            if(string.IsNullOrWhiteSpace(Response.Content))
+            if (string.IsNullOrWhiteSpace(Response.Content))
                 throw AssertionExceptionFactory.CreateForResponse(Response, "Expected response content to NOT be: NULL, Empty or WhiteSpace.");
 
             return this;
@@ -46,7 +51,7 @@ namespace Requester.Validation
             if (node == null)
                 throw AssertionExceptionFactory.CreateForResponse(Response, "Expected sent path '{0}' to map to a node in the JSON document, but it did not.", path);
 
-            if(!node.ValueIsEqualTo(expectedValue))
+            if (!node.ValueIsEqualTo(expectedValue))
                 throw AssertionExceptionFactory.CreateForResponse(Response, "Expected sent path '{0}' to return '{1}', but got '{2}'.", path, expectedValue, node.Value<T>());
 
             return this;
@@ -64,22 +69,23 @@ namespace Requester.Validation
             return this;
         }
 
-        public JsonHttpResponseValidation HaveJsonConformingToSchema(string properties)
+        public async Task<JsonHttpResponseValidation> HaveJsonConformingToSchemaAsync(string jsonSchema)
         {
-            if (!properties.StartsWith("{"))
-                properties = "{" + properties;
+            var schema = await JsonSchema4.FromJsonAsync(jsonSchema);
+            var errors = schema.Validate(Response.Content);
+            if (!errors.Any())
+                return this;
 
-            if (!properties.EndsWith("}"))
-                properties += "}";
+            var details = new StringBuilder();
 
-            var schema = JsonSchema.Parse("{type: 'object', properties:" + properties + "}");
-            JToken.Parse(Response.Content).Validate(schema, (sender, args) =>
+            var c = 0;
+            foreach (var error in errors)
             {
-                throw AssertionExceptionFactory.CreateForResponse(Response,
-                    "Expected object to be conforming to specified JSON schema. Failed when inspecting '{0}' due to '{1}'", args.Path, args.Message);
-            });
+                details.AppendLine($"Err#{++c}:{error.Path}:{error.Kind}");
+            }
 
-            return this;
+            throw AssertionExceptionFactory.CreateForResponse(Response,
+                "Expected object to be conforming to specified JSON schema.{0}Details:{0}{1}", Environment.NewLine, details);
         }
     }
 }
