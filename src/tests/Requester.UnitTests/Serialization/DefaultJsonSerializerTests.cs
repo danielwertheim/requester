@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Requester.Serialization;
 using Xunit;
@@ -15,7 +16,7 @@ namespace Requester.UnitTests.Serialization
         [Fact]
         public void Should_not_touch_dictionary_keys()
         {
-            var orgData = new SomeData
+            var orgData = new HasDictionary
             {
                 SomeKeys = new Dictionary<string, int>
                 {
@@ -27,15 +28,36 @@ namespace Requester.UnitTests.Serialization
 
             var json = UnitUnderTest.Serialize(orgData);
 
-            var reconstructed = UnitUnderTest.Deserialize<SomeData>(json);
+            var reconstructed = UnitUnderTest.Deserialize<HasDictionary>(json);
 
             foreach (var kv in orgData.SomeKeys)
                 reconstructed.SomeKeys.ContainsKey(kv.Key).Should().BeTrue();
         }
 
-        private class SomeData
+        [Fact]
+        public void Should_not_die_When_json_contains_more_members()
+        {
+            var orgData = new
+            {
+                MyString = "Test",
+                MyInt = 42
+            };
+
+            var json = UnitUnderTest.Serialize(orgData);
+
+            Action a = () => UnitUnderTest.Deserialize<HasOnlyString>(json);
+            
+            a.ShouldNotThrow();
+        }
+
+        private class HasDictionary
         {
             public Dictionary<string, int> SomeKeys { get; set; }
+        }
+
+        private class HasOnlyString
+        {
+            public string StringValue { get; set; }
         }
     }
 }
