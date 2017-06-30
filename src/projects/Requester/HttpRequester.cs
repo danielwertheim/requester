@@ -30,16 +30,6 @@ namespace Requester
         public static HttpRequester Create(Uri uri = null, HttpMessageHandler handler = null, IJsonSerializer serializer = null)
             => new HttpRequester(uri, handler, serializer);
 
-        [Obsolete("Use static factory method instead. This will be removed in future major version.")]
-        public HttpRequester(string url, HttpMessageHandler handler = null)
-            : this(new Uri(url), handler) { }
-
-        [Obsolete("Use static factory method instead. This will be removed in future major version.")]
-        public HttpRequester(Uri uri = null, HttpMessageHandler handler = null)
-            : this(uri, handler, new DefaultJsonSerializer())
-        {
-        }
-
         private HttpRequester(Uri uri, HttpMessageHandler handler, IJsonSerializer serializer)
         {
             JsonSerializer = serializer ?? new DefaultJsonSerializer();
