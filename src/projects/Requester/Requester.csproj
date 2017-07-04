@@ -1,87 +1,29 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2C5A9BD7-7698-440A-8001-9463D3AED95A}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Requester</RootNamespace>
-    <AssemblyName>Requester</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>netstandard1.3</TargetFramework>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <Version>0.0.0</Version>
+    <Authors>danielwertheim</Authors>
+    <Company>danielwertheim</Company>
+    <Copyright>Daniel Wertheim</Copyright>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>http web api json</PackageTags>
+    <Description>Requester is designed to help you interact with JSON based web APIs. Nothing else. There is also Requester.Validation that you can use for testing purposes, to validate responses from APIs. Like statuses, schemas etc.</Description>
+    <PackageProjectUrl>https://github.com/danielwertheim/requester</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/danielwertheim/requester/master/LICENSE.txt</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/danielwertheim/requester</RepositoryUrl>
+    <PackageReleaseNotes>https://github.com/danielwertheim/requester/master/ReleaseNotes.md</PackageReleaseNotes>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;1705;1591</NoWarn>
+    <DocumentationFile>bin\Release\netstandard1.4\Requester.xml</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <NoWarn>1591</NoWarn>
-    <DocumentationFile>bin\Release\Requester.xml</DocumentationFile>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Ensure.That, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Ensure.That.5.0.0\lib\net45\Ensure.That.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Net.Http" />
+    <PackageReference Include="Ensure.That" Version="5.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\GlobalAssemblyInfo.cs">
-      <Link>Properties\GlobalAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\GlobalAssemblyVersion.cs">
-      <Link>Properties\GlobalAssemblyVersion.cs</Link>
-    </Compile>
-    <Compile Include="IConfigureHttpRequesterOf.cs" />
-    <Compile Include="IHttpRequesterConfig.cs" />
-    <Compile Include="Serialization\DebugJsonSerializer.cs" />
-    <Compile Include="Serialization\DefaultJsonSerializer.cs" />
-    <Compile Include="Serialization\DefaultJsonSerializerSettings.cs" />
-    <Compile Include="Http\BasicAuthorizationString.cs" />
-    <Compile Include="Http\HttpContentTypes.cs" />
-    <Compile Include="HttpRequest.cs" />
-    <Compile Include="HttpRequester.cs" />
-    <Compile Include="Extensions\HttpExtensions.cs" />
-    <Compile Include="Extensions\TaskExtensions.cs" />
-    <Compile Include="Extensions\UriExtensions.cs" />
-    <Compile Include="Http\HttpRequesterHeaders.cs" />
-    <Compile Include="HttpResponse.cs" />
-    <Compile Include="IHttpRequester.cs" />
-    <Compile Include="Http\JsonContent.cs" />
-    <Compile Include="IJsonSerializer.cs" />
-    <Compile Include="NullString.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Extensions\JTokenExtensions.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
