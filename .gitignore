@@ -29,12 +29,6 @@ tools/
 *.orig
 *.pfx
 
-# nuget
-[Pp]ackages/
-
-# approvals#
-*.received.txt
-
 # resharper
 _ReSharper.*
 *.resharper*
