@@ -55,12 +55,12 @@ namespace IntegrationTests
                     .BeSuccessful()
                     .BeJsonResponse()
                     .HaveJsonConformingToSchemaAsync(@"{type: 'object', properties: {
-                        _id: {type: 'integer'},
+                        _id: {type: 'string'},
                         _rev: {type: 'string'},
-                        name2: {type: 'string'},
+                        name: {type: 'string'},
                         address: {type: 'object', properties: {zip: {type: 'integer'}}},
                         hobbies: {type: 'array', items: {type: 'string'}}
-                    }, required: ['_id', '_rev', 'name2', 'address', 'hobbies']}").Result
+                    }, required: ['_id', '_rev', 'name', 'address', 'hobbies']}").Result
                     .Match(new { _id = "doc1", name = "Daniel Wertheim" }));
 
             When.GetOfJson(DbUrlWithCredentials + "doc2")
