@@ -1,15 +1,16 @@
 # Requester
-**Requester:**
+## Requester
+Requester is designed to help you interact with JSON based web APIs.
 
 [![Nuget](https://img.shields.io/nuget/v/requester.svg)](https://www.nuget.org/packages/requester/)
 
-**Requester.Validation:**
+## Requester.Validation
+Requester.Validation is **ONLY** intended for testing of JSON based web APIs.
 
 [![Nuget](https://img.shields.io/nuget/v/requester.validation.svg)](https://www.nuget.org/packages/requester.validation/)
 
-Requester is designed to help you interact with, as well as validate, web APIs. It's mainly focused on APIs that work with JSON.
-
-It was put together after some fiddling with an awesome NodeJS peer: [FrisbyJS](http://frisbyjs.com/ "FrisbyJS"), for validationg web APIs.
+# Why?
+Requester was put together after some fiddling with an awesome NodeJS peer: [FrisbyJS](http://frisbyjs.com/ "FrisbyJS"), for validationg web APIs.
 
 Most of the `HttpRequester` has been extracted from `MyCouch` [the async CouchDB client for .Net](https://github.com/danielwertheim/mycouch).
 
@@ -174,13 +175,13 @@ public class Candy
             .TheResponse(should => should
                 .BeSuccessful()
                 .BeJsonResponse()
-                .HaveJsonConformingToSchema(@"{
-                    _id: {type: 'string', required: true},
-                    _rev: {type: 'string', required: true},
+                .HaveJsonConformingToSchemaAsync(@"{type: 'object', properties: {
+                    _id: {type: 'string'},
+                    _rev: {type: 'string'},
                     name: {type: 'string'},
                     address: {type: 'object', properties: {zip: {type: 'integer'}}},
                     hobbies: {type: 'array', items: {type: 'string'}}
-                }")
+                }, required: ['_id', '_rev']}").Result
                 .Match(new {_id = "doc1", name = "Daniel Wertheim"}));
 
         When.GetOfJson(DbUrl + "doc2")
@@ -199,14 +200,15 @@ public class Candy
 ```
 
 #### Violations
-Violations will show in your test runner. The sample below violates `HaveJsonConformingToSchema`.
+Violations will show in your test runner. The sample below violates `HaveJsonConformingToSchemaAsync`.
 
 ```
 My_test_one failed
 
 Requester.Validation.RequesterAssertionException : Expected object to be conforming to specified JSON schema.
-Failed when inspecting 'address.street' due to 'Invalid type.
-Expected Integer but got String. Line 1, position 112.'
+Details:
+Err#1:#/_id:StringExpected
+Err#2:#/_rev:PropertyRequired
 
 RequestUri: http://localhost:5984/mydb/doc1
 RequestMethod: GET

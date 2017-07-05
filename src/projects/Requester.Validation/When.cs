@@ -1,6 +1,6 @@
 using System;
 using System.Net.Http;
-using System.Runtime.Remoting.Messaging;
+using System.Threading;
 using EnsureThat;
 
 namespace Requester.Validation
@@ -14,16 +14,12 @@ namespace Requester.Validation
     {
         private const string MessageHandlerFnPropName = "MessageHandlerFn@When";
 
+        private static readonly AsyncLocal<Func<HttpMessageHandler>> MessageHandlerFnState = new AsyncLocal<Func<HttpMessageHandler>>();
+
         public static Func<HttpMessageHandler> MessageHandlerFn
         {
-            get
-            {
-                return CallContext.LogicalGetData(MessageHandlerFnPropName) as Func<HttpMessageHandler>;
-            }
-            set
-            {
-                CallContext.LogicalSetData(MessageHandlerFnPropName, value);
-            }
+            get => MessageHandlerFnState.Value;
+            set => MessageHandlerFnState.Value = value;
         }
 
         public static HttpTextResponse Head(string url, Action<HttpRequest> configurer = null)
