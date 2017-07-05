@@ -15,7 +15,7 @@ Requester was put together after some fiddling with an awesome NodeJS peer: [Fri
 Most of the `HttpRequester` has been extracted from `MyCouch` [the async CouchDB client for .Net](https://github.com/danielwertheim/mycouch).
 
 ## NuGet
-It supports .Net4.5+ and there are **two packages**: one for *web API interaction*; one for *web API validation*.
+It supports .NET Standard v1.3 and there are **two packages**: one for *web API interaction*; one for *web API validation*.
 
 ### Requester NuGet
 The [Requester package](https://www.nuget.org/packages/requester), is only for consuming web APIs. For validation features: see [Requester.Validation](https://www.nuget.org/packages/requester.validation)
