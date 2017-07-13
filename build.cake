@@ -24,6 +24,7 @@ Task("CI")
 Task("InitOutDir").Does(() => {
     EnsureDirectoryExists(config.OutDir);
     CleanDirectory(config.OutDir);
+    DeleteFiles(config.SrcDir + "projects/**/*.nupkg");
 });
 
 Task("Restore").Does(() => {
@@ -85,7 +86,7 @@ Task("Pack").Does(() => {
     }
 
     CopyFiles(
-        GetFiles(config.SrcDir + "projects/**/*.nupkg"),
+        GetFiles(config.SrcDir + "projects/**/*." + config.SemVer + ".nupkg"),
         config.OutDir);
 });
 
