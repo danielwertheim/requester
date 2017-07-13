@@ -33,7 +33,8 @@ Task("Restore").Does(() => {
                 .SetConfiguration(config.BuildProfile)
                 .SetVerbosity(Verbosity.Minimal)
                 .WithTarget("Restore")
-                .WithProperty("TreatWarningsAsErrors", "true"));
+                .WithProperty("TreatWarningsAsErrors", "true")
+                .WithProperty("Version", config.SemVer));
     }
 });
 
@@ -72,12 +73,13 @@ Task("IntegrationTests").Does(() => {
 });
 
 Task("Pack").Does(() => {
-    foreach(var sln in GetFiles(config.SrcDir + "projects/**/*.csproj")) {
-        DotNetBuild(sln, settings =>
+    foreach(var csproj in GetFiles(config.SrcDir + "projects/**/*.csproj")) {
+        DotNetBuild(csproj, settings =>
             settings
                 .SetConfiguration(config.BuildProfile)
                 .SetVerbosity(Verbosity.Minimal)
                 .WithTarget("Pack")
+                .WithProperty("NoBuild", "True")
                 .WithProperty("TreatWarningsAsErrors", "true")
                 .WithProperty("Version", config.SemVer));
     }
